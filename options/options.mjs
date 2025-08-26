@@ -30,7 +30,7 @@ async function initializeOptions() {
         
         // Hide loading overlay and show options form
         loadingOverlay.style.display = 'none';
-        optionsForm.style.display = 'block';
+        optionsForm.style.display = 'flex';
         
         console.log('Options page initialized with settings:', settings);
     } catch (error) {
@@ -39,7 +39,7 @@ async function initializeOptions() {
         
         // Hide loading overlay and show options form even on error
         loadingOverlay.style.display = 'none';
-        optionsForm.style.display = 'block';
+        optionsForm.style.display = 'flex';
     }
 }
 

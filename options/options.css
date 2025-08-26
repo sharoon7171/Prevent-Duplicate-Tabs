@@ -243,6 +243,13 @@ footer a:hover {
     margin: 0;
 }
 
+/* Options Form Container - Restore original layout */
+#optionsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .options-container {
