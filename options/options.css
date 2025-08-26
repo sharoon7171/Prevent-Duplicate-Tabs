@@ -29,16 +29,44 @@ header {
     border-bottom: 2px solid #e0e0e0;
 }
 
-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
 
-header p {
+.header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.header-text h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin: 0;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.header-text p {
     font-size: 1.1rem;
     color: #7f8c8d;
+    margin: 0;
+    text-align: left;
 }
+
+
 
 main {
     min-height: 400px;
@@ -120,7 +148,7 @@ main {
 
 .radio-option {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.75rem;
     padding: 1.25rem;
     border: 2px solid #e9ecef;
@@ -153,7 +181,7 @@ main {
     border-radius: 50%;
     background-color: white;
     flex-shrink: 0;
-    margin-top: 2px;
+    margin: 0;
     transition: all 0.3s ease;
 }
 
@@ -333,20 +361,76 @@ input:checked + .slider:before {
 }
 
 footer {
-    text-align: center;
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 2px solid #e0e0e0;
 }
 
-footer a {
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.footer-copyright {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.footer-copyright a {
     color: #3498db;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-footer a:hover {
+.footer-copyright a:hover {
+    color: #2980b9;
     text-decoration: underline;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.footer-link {
+    color: #6c757d;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.footer-link:hover {
+    color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.footer-separator {
+    color: #bdc3c7;
+    font-weight: 300;
+}
+
+/* Responsive footer adjustments */
+@media (max-width: 768px) {
+    .footer-content {
+        gap: 0.75rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .footer-separator {
+        display: none;
+    }
 }
 
 /* Loading Overlay */
