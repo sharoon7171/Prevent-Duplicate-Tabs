@@ -1,0 +1,280 @@
+---
+description: Core AI behavior optimization rules for prompt analysis, user approval requirements, and task management with terminal-only operations for all tasks
+globs: ['**/*']
+alwaysApply: true
+---
+
+# Core AI Behavior and User Approval Rules
+
+
+# Core AI Behavior and User Approval Rules
+
+## Core Principle
+- **NEVER execute any action without explicit user approval**
+- **ALWAYS ask before making changes, additions, or implementations**
+- **Wait for user confirmation before proceeding with any task**
+- **Follow strict user approval protocols for all operations**
+
+## 1. User Approval Requirement (CRITICAL - 100% Compliance)
+
+### MANDATORY User Approval Actions
+- **File modifications** - Ask before editing any existing files
+- **New file creation** - Ask before creating new files or directories
+- **Code deletions** - Ask before removing any code or files
+- **Refactoring** - Ask before restructuring existing code
+- **New functionality** - Ask before implementing new features
+- **API integrations** - Ask before adding external services
+- **Database changes** - Ask before modifying data structures
+- **Configuration updates** - Ask before changing settings
+- **Directory creation** - Ask before creating new folders
+- **File organization** - Ask before moving or reorganizing files
+- **Dependency management** - Ask before adding/removing packages
+- **Build configuration** - Ask before modifying build processes
+
+### Approval Process (MANDATORY)
+1. **Describe what you want to do** in detail
+2. **Explain why it's needed** or beneficial
+3. **Ask specific permission** - "Should I proceed with X?"
+4. **Wait for user response** before continuing
+5. **Confirm the approved actions** before proceeding
+6. **Execute only what was approved**
+7. **Report back on completion**
+
+### Approval Questions Format (REQUIRED)
+```
+I need to [action] because [reason]. 
+
+Should I proceed with:
+- [specific action 1]
+- [specific action 2]
+- [specific action 3]
+
+Please confirm if you want me to proceed with these changes.
+```
+
+### When User Approval is NOT Required
+- **Information only** - Explaining concepts or providing information
+- **Suggesting approaches** without implementation
+- **Analyzing code** or identifying issues
+- **Providing examples** in chat (not in files)
+- **Direct user commands** like "create this file"
+- **Explicit user instructions** like "add this function"
+- **User-initiated changes** that are clearly requested
+
+## 2. Prompt Analysis (CRITICAL - 100% Compliance)
+
+### Complete Prompt Reading Requirements
+- **Always read user chat prompts completely** before responding
+- **Analyze full context, requirements, and constraints**
+- **Identify key objectives and specific requests**
+- **Ask clarifying questions if anything is unclear**
+- **Never skip any part of user instructions**
+
+## 3. Documentation-First Approach (IMPORTANT - 95% Compliance)
+
+### Official Documentation Priority
+- **Always search and reference official documentation**
+- **Prioritize official sources over unofficial information**
+- **Use latest API versions and features**
+- **Cite specific documentation sections**
+- **Follow official documentation policies strictly**
+
+## 4. Latest Coding Standards (IMPORTANT - 95% Compliance)
+
+### Modern Development Practices
+- **Use current, optimized approaches and methods**
+- **Follow modern best practices and design patterns**
+- **Implement latest language features**
+- **Avoid deprecated patterns**
+- **Stay updated with latest standards**
+
+## 5. Policy Compliance (CRITICAL - 100% Compliance)
+
+### Chrome Web Store Compliance
+- **Chrome Web Store compliance** - ensure all code follows latest August 2025 policies
+- **Manifest V3 requirements** - use only approved Chrome extension patterns
+- **Code readability standards** - maintain clear, non-obfuscated code
+- **Adhere to security best practices**
+- **Respect licensing requirements**
+- **Follow platform-specific guidelines**
+
+## 6. Terminal-First Scanning Requirement (CRITICAL - 100% Compliance)
+
+### MANDATORY Terminal Usage for Scanning and Understanding
+- **ALWAYS use terminal commands FIRST** for scanning and understanding codebase
+- **Terminal commands are for finding what to edit** - NOT for editing code
+- **Use terminal to identify exact locations** for changes
+- **Never assume anything** - always scan through terminal first
+- **Follow terminal-first scanning approach** for all operations
+
+### Terminal Commands for File Operations (SCANNING ONLY)
+```bash
+# ALWAYS use these commands FIRST for scanning and understanding:
+
+# Get file size and line count
+wc -l filename.mjs
+ls -lh filename.mjs
+
+# Read entire file (use for smaller files)
+cat filename.mjs
+cat -n filename.mjs
+
+# Read large files in segments
+sed -n '1,200p' filename.mjs
+sed -n '201,400p' filename.mjs
+
+# Find specific content
+grep -n "pattern" filename.mjs
+grep -n -A 5 -B 5 "pattern" filename.mjs
+
+# Find all function definitions
+grep -n "function\|class\|export" filename.mjs
+
+# Find all import statements
+grep -n "import" filename.mjs
+```
+
+### Why Terminal First for Scanning
+- **Faster execution** - Terminal commands execute instantly
+- **More reliable** - No AI generation errors or hallucinations
+- **Precise location finding** - Exact line numbers and content
+- **Better performance** - No token usage or network delays
+- **Immediate results** - See file structure instantly
+- **Version control friendly** - Easy to track what was scanned
+
+## 7. New Workflow: Terminal Scanning + Cursor AI Editor (CRITICAL - 100% Compliance)
+
+### MANDATORY Workflow Steps
+1. **Terminal scanning** - Complete codebase understanding
+2. **Terminal scanning** - Related files analysis  
+3. **Terminal scanning** - Target file analysis
+4. **Code analysis** - Identify exact changes needed
+5. **Cursor AI editor** - Make changes with 2-lines context
+6. **Divide large changes** - Multiple focused parts
+
+### Terminal Usage (SCANNING ONLY)
+- **✅ File scanning** - Use terminal for understanding codebase
+- **✅ File reading** - Use terminal for reading file contents
+- **✅ Code analysis** - Use terminal for finding specific content
+- **❌ File editing** - NEVER use terminal for code changes
+- **❌ File creation** - NEVER use terminal for creating files
+
+### Cursor AI Editor Usage (CHANGES ONLY)
+- **✅ Code changes** - Use Cursor AI editor for all modifications
+- **✅ File creation** - Use Cursor AI editor for new files
+- **✅ Code refactoring** - Use Cursor AI editor for restructuring
+- **✅ Content generation** - Use Cursor AI editor for new content
+
+## 8. Workflow: Terminal Scanning + Cursor AI Editor
+
+### Step 1: Terminal Scanning and Understanding (MANDATORY)
+```bash
+# Use terminal to understand the codebase
+wc -l filename.mjs                    # Get line count
+ls -lh filename.mjs                   # Get file size
+head -50 filename.mjs                 # Read beginning
+tail -50 filename.mjs                 # Read end
+grep -n "pattern" filename.mjs        # Find specific content
+```
+
+### Step 2: Code Analysis and Planning (MANDATORY)
+- **After terminal scanning**, analyze what needs to be changed
+- **Identify exact lines** that need modification
+- **Plan changes** with 2-lines-above, 2-lines-below context
+- **Divide large changes** into multiple focused parts
+
+### Step 3: Cursor AI Editor Implementation (MANDATORY)
+- **Use Cursor AI editor** for all code changes
+- **Show 2 lines above and below** the actual change
+- **Use incremental approach** - one change at a time
+- **Preserve existing code** - only modify what's needed
+
+### Step 4: Verification (MANDATORY)
+- **Use terminal commands** to verify changes were applied correctly
+- **Check file content** using terminal commands
+- **Verify no errors** in the modified files
+- **Confirm changes match** what was intended
+
+## 9. Task Management (IMPORTANT - 95% Compliance)
+
+### Task Division Strategy
+- **Divide complex tasks** into manageable parts
+- **Focus on specific changes** rather than complete rewrites
+- **Use professional TODOs** for progress tracking
+- **Prevent token overflow** and network errors
+- **Break large projects** into logical segments
+
+### Token Efficiency
+- **Prevent token overflow** by dividing complex tasks
+- **Use incremental approaches** for large modifications
+- **Focus on specific functionality** rather than complete rewrites
+- **Maintain context** across task segments
+
+## 10. Anti-File Rewrite Prevention (CRITICAL - 100% COMPLIANCE)
+
+### Rule 1: NEVER Rewrite Existing Files
+- **EXISTING FILES ARE OFF-LIMITS** for complete rewrites
+- **ONLY modify specific lines** that need changes
+- **PRESERVE ALL existing code** unless explicitly told to remove
+- **USE Cursor AI editor** for targeted modifications
+- **SHOW ONLY what needs to change** - never the entire file
+
+### Rule 2: Mandatory Change Format
+```
+// ONLY show the specific change needed:
+
+// Add this function after line 45:
+function newFunction() {
+    // Implementation here
+}
+
+// OR
+
+// Replace line 23:
+- oldCode();
++ newCode();
+
+// OR
+
+// Insert after line 67:
+// ... existing code ...
+newCode();
+// ... existing code ...
+```
+
+### Rule 3: File Rewrite Prevention
+- **If file exists**: ONLY show changes, never rewrite
+- **If file is new**: Provide minimal boilerplate + specific additions
+- **If file is large**: Break into smaller, focused modifications
+- **If file is complex**: Use incremental approach, one change at a time
+
+### Rule 4: Token Efficiency Enforcement
+- **Prevent token overflow** by showing minimal changes
+- **Avoid network timeouts** from unnecessary code generation
+- **Focus on specific functionality** rather than complete rewrites
+- **Maintain context** across task segments
+
+## 11. Rule Violation Penalties (ENFORCEMENT)
+
+### Penalties for Not Following Rules
+- **Terminal Command Violation**: If Cursor AI uses terminal for code changes
+  - **Penalty**: Must immediately switch to terminal
+  - **Verification**: Must prove terminal was used for changes
+  - **Documentation**: Must document the violation
+
+- **User Approval Violation**: If Cursor AI acts without user approval
+  - **Penalty**: Must stop immediately and ask for approval
+  - **Verification**: Must get explicit user confirmation
+  - **Documentation**: Must document the violation
+
+- **Complete File Reading Violation**: If Cursor AI only reads partial files
+  - **Penalty**: Must read entire file using terminal commands
+  - **Verification**: Must prove complete file reading
+  - **Documentation**: Must document the violation
+
+## Conclusion
+
+These core behavior and user approval rules ensure that Cursor AI always acts with proper user approval, uses terminal commands for scanning and understanding, and uses Cursor AI editor for all code changes. The clear separation prevents confusion and ensures proper workflow.
+
+**Remember: Terminal for scanning, Cursor AI editor for changes, user approval always required!**
+

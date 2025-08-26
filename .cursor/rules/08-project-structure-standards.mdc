@@ -1,0 +1,437 @@
+---
+description: Professional project structure standards for Chrome extension development with logical file separation and no duplication enforcement
+globs: ['**/*']
+alwaysApply: true
+---
+
+# 🏗️ **PROJECT STRUCTURE STANDARDS FOR CHROME EXTENSIONS**
+
+## Core Principle
+- **ALWAYS follow professional project structure** for Chrome extension development
+- **Organize code logically** with clear separation of concerns
+- **Maintain consistent folder organization** across all projects
+- **Follow industry best practices** for maintainability and scalability
+- **Ensure Chrome Web Store compliance** through proper structure
+- **STRICTLY ENFORCE** separate files for every component, function, and feature
+- **NEVER DUPLICATE** code across multiple files
+- **Use logical separation** based on functionality, not arbitrary line limits
+
+## 1. 🚨 **MANDATORY PROJECT DIRECTORY STRUCTURE (100% COMPLIANCE)**
+
+### Core Directory Organization
+```
+chrome-extension-project/
+├── src/                    # Source code directory (MANDATORY)
+│   ├── components/         # Reusable UI components
+│   │   ├── buttons/        # Button components
+│   │   ├── forms/          # Form components
+│   │   ├── modals/         # Modal components
+│   │   └── layouts/        # Layout components
+│   ├── functions/          # Reusable functions
+│   │   ├── api/            # API functions
+│   │   ├── utils/          # Utility functions
+│   │   ├── validators/     # Validation functions
+│   │   └── helpers/        # Helper functions
+│   ├── constants/          # All constants and configurations
+│   │   ├── options/        # Extension options constants
+│   │   ├── api/            # API constants
+│   │   ├── ui/             # UI constants
+│   │   └── config/         # Configuration constants
+│   ├── styles/             # All CSS/SCSS files
+│   │   ├── components/     # Component-specific styles
+│   │   ├── layouts/        # Layout styles
+│   │   ├── themes/         # Theme styles
+│   │   └── base/           # Base styles
+│   ├── types/              # TypeScript type definitions
+│   ├── hooks/              # Custom React hooks (if applicable)
+│   └── services/           # Business logic services
+├── background/              # Background scripts and service workers
+├── content/                 # Content scripts and related styles
+├── popup/                   # Popup interface (HTML, JS, CSS)
+├── options/                 # Options page files
+├── assets/                  # Images, icons, and static resources
+├── manifest.json            # Extension manifest (MANDATORY)
+├── README.md                # Project documentation
+└── package.json             # Dependencies and build scripts
+```
+
+### Directory Requirements (MANDATORY)
+- **src/**: Contains ALL source code with strict organization
+- **background/**: Contains background scripts and service workers
+- **content/**: Holds content scripts and related styles
+- **popup/**: Includes HTML, JavaScript, and CSS for popup interface
+- **options/**: Contains files for the options page
+- **assets/**: Stores images, icons, and other static resources
+- **manifest.json**: The manifest file defining extension metadata (CRITICAL)
+
+## 2. 🚨 **STRICT FILE SEPARATION STANDARDS (100% COMPLIANCE)**
+
+### Rule 1: One Component Per File (MANDATORY)
+- **NEVER put multiple components** in a single file
+- **Each component gets its own file** with descriptive naming
+- **Component files must be in appropriate subdirectories**
+- **Example**: `src/components/buttons/checkbox.mjs` for checkbox component
+
+### Rule 2: One Function Per File (MANDATORY)
+- **NEVER put multiple functions** in a single file
+- **Each function gets its own file** with descriptive naming
+- **Function files must be in appropriate subdirectories**
+- **Example**: `src/functions/api/fetchData.mjs` for fetch function
+
+### Rule 3: Constants Separation (MANDATORY)
+- **NEVER put constants in component or function files**
+- **All constants must be in dedicated constant files**
+- **Constants must be organized by category**
+- **Example**: `src/constants/options/extensionSettings.mjs` for extension options
+
+### Rule 4: Styles Separation (MANDATORY)
+- **NEVER put styles in JavaScript files**
+- **All styles must be in dedicated CSS/SCSS files**
+- **Styles must be organized by component/feature**
+- **Example**: `src/styles/components/checkbox.css` for checkbox styles
+
+## 3. �� **LOGICAL FILE ORGANIZATION STANDARDS (100% COMPLIANCE)**
+
+### File Naming Conventions
+- **Use descriptive names** for files, variables, and functions
+- **Follow kebab-case** for file names: `user-settings.mjs`
+- **Use .mjs extension** for ES6+ modules with import/export
+- **Use .js extension** for regular scripts without modules
+- **Use .html extension** for HTML files (NEVER .mjs)
+- **Use .css extension** for stylesheets (NEVER .mjs)
+- **Use .json extension** for configuration files (NEVER .mjs)
+
+### File Placement Rules
+```
+src/
+├── components/
+│   ├── buttons/
+│   │   ├── checkbox.mjs        # Checkbox component only
+│   │   ├── button.mjs          # Button component only
+│   │   └── toggle.mjs          # Toggle component only
+│   ├── forms/
+│   │   ├── input.mjs           # Input component only
+│   │   ├── select.mjs          # Select component only
+│   │   └── form.mjs            # Form wrapper only
+│   └── modals/
+│       ├── modal.mjs           # Modal component only
+│       └── dialog.mjs          # Dialog component only
+
+├── functions/
+│   ├── api/
+│   │   ├── fetchData.mjs       # Fetch function only
+│   │   ├── postData.mjs        # Post function only
+│   │   └── updateData.mjs      # Update function only
+│   ├── utils/
+│   │   ├── formatDate.mjs      # Date formatting only
+│   │   ├── validateInput.mjs   # Input validation only
+│   │   └── generateId.mjs      # ID generation only
+│   └── helpers/
+│       ├── domHelper.mjs       # DOM manipulation only
+│       └── storageHelper.mjs   # Storage operations only
+
+├── constants/
+│   ├── options/
+│   │   ├── extensionSettings.mjs   # Extension options only
+│   │   ├── userPreferences.mjs     # User preferences only
+│   │   └── featureFlags.mjs        # Feature flags only
+│   ├── api/
+│   │   ├── endpoints.mjs           # API endpoints only
+│   │   ├── headers.mjs             # API headers only
+│   │   └── timeouts.mjs            # API timeouts only
+│   └── ui/
+│       ├── colors.mjs              # Color constants only
+│       ├── sizes.mjs               # Size constants only
+│       └── breakpoints.mjs         # Breakpoint constants only
+
+└── styles/
+    ├── components/
+    │   ├── checkbox.css            # Checkbox styles only
+    │   ├── button.css              # Button styles only
+    │   └── modal.css               # Modal styles only
+    ├── layouts/
+    │   ├── header.css              # Header styles only
+    │   ├── sidebar.css             # Sidebar styles only
+    │   └── footer.css              # Footer styles only
+    └── base/
+        ├── reset.css                # CSS reset only
+        ├── typography.css           # Typography styles only
+        └── variables.css            # CSS variables only
+```
+
+## 4. 🚨 **LOGICAL CODE FILE STRUCTURE STANDARDS (100% COMPLIANCE)**
+
+### Standard File Structure (MANDATORY)
+Every code file must follow this logical structure:
+
+```javascript
+// 1. IMPORTS AND DEPENDENCIES (Top of file)
+import { helperFunction } from './utils/helper.mjs';
+import { CONSTANT_VALUE } from './constants/config.mjs';
+
+// 2. CONSTANTS AND CONFIGURATION (After imports)
+const LOCAL_CONFIG = {
+    timeout: 5000,
+    retries: 3
+};
+
+// 3. UTILITY FUNCTIONS (After constants)
+function localHelper() {
+    // Implementation
+}
+
+// 4. MAIN LOGIC (Core functionality)
+function mainFunction() {
+    // Main implementation using imports and constants
+}
+
+// 5. EVENT LISTENERS (If applicable)
+document.addEventListener('DOMContentLoaded', mainFunction);
+
+// 6. EXPORT STATEMENTS (End of file)
+export { mainFunction, localHelper };
+```
+
+### File Content Rules (MANDATORY)
+- **Single responsibility principle** - one purpose per file
+- **Logical organization** - related functionality grouped together
+- **Clear separation** between different code sections
+- **No mixing** of different concerns in single file
+- **Logical file size** - files should be focused and manageable
+
+## 5. 🚨 **NO DUPLICATION ENFORCEMENT (100% COMPLIANCE)**
+
+### Rule 1: Function Duplication Prevention
+- **NEVER create the same function** in multiple files
+- **Use import/export** to share functions between files
+- **Create utility files** for commonly used functions
+- **Example**: `src/functions/utils/commonHelpers.mjs`
+
+### Rule 2: Constant Duplication Prevention
+- **NEVER define the same constant** in multiple files
+- **Use centralized constant files** for shared values
+- **Import constants** where needed
+- **Example**: `src/constants/shared/globalConstants.mjs`
+
+### Rule 3: Style Duplication Prevention
+- **NEVER duplicate CSS rules** across multiple files
+- **Use CSS variables** for shared values
+- **Create base styles** for common elements
+- **Example**: `src/styles/base/common.css`
+
+### Rule 4: Component Duplication Prevention
+- **NEVER create similar components** with slight differences
+- **Use component composition** and props for variations
+- **Create base components** that can be extended
+- **Example**: `src/components/base/BaseButton.mjs`
+
+## 6. 🚨 **REUSABILITY ENFORCEMENT (100% COMPLIANCE)**
+
+### Rule 1: Component Reusability
+- **Design components** to be reusable across the project
+- **Use props/parameters** for customization
+- **Avoid hardcoded values** in components
+- **Example**: `<Checkbox enabled={true} onChange={handleChange} />`
+
+### Rule 2: Function Reusability
+- **Design functions** to be reusable across the project
+- **Use parameters** for different use cases
+- **Avoid side effects** that limit reusability
+- **Example**: `formatDate(date, format = 'default')`
+
+### Rule 3: Style Reusability
+- **Design styles** to be reusable across the project
+- **Use CSS classes** for common patterns
+- **Avoid component-specific styles** when possible
+- **Example**: `.btn-primary`, `.form-input`, `.modal-overlay`
+
+## 7. 🚨 **IMPORT/EXPORT STANDARDS (100% COMPLIANCE)**
+
+### Import Organization (MANDATORY)
+```javascript
+// 1. External libraries (alphabetical order)
+import React from 'react';
+import { useState, useEffect } from 'react';
+
+// 2. Internal modules (alphabetical order)
+import { API_ENDPOINTS } from '../constants/api/endpoints.mjs';
+import { Button } from '../components/buttons/button.mjs';
+import { fetchData } from '../functions/api/fetchData.mjs';
+
+// 3. Relative imports (alphabetical order)
+import { localHelper } from './helpers/localHelper.mjs';
+import { LOCAL_CONSTANTS } from './constants/local.mjs';
+```
+
+### Export Standards (MANDATORY)
+```javascript
+// Named exports for multiple items
+export { function1, function2, CONSTANT1 };
+
+// Default export for single main item
+export default MainComponent;
+
+// Re-export for convenience
+export { Button } from './buttons/button.mjs';
+export { Checkbox } from './buttons/checkbox.mjs';
+```
+
+## 8. 🚨 **EXAMPLE IMPLEMENTATION (NO DUPLICATION)**
+
+### Scenario: Add Extension Enable/Disable Option
+
+**CORRECT IMPLEMENTATION (Separate files):**
+
+1. **Constants File**: `src/constants/options/extensionSettings.mjs`
+```javascript
+export const EXTENSION_OPTIONS = {
+    ENABLE: 'enable',
+    DISABLE: 'disable',
+    DEFAULT_STATE: true
+};
+
+export const OPTION_LABELS = {
+    ENABLE: 'Enable Extension',
+    DISABLE: 'Disable Extension'
+};
+```
+
+2. **Component File**: `src/components/forms/checkbox.mjs`
+```javascript
+import { EXTENSION_OPTIONS, OPTION_LABELS } from '../../constants/options/extensionSettings.mjs';
+
+export function Checkbox({ checked, onChange, label }) {
+    return (
+        <label>
+            <input type="checkbox" checked={checked} onChange={onChange} />
+            {label}
+        </label>
+    );
+}
+```
+
+3. **Style File**: `src/styles/components/checkbox.css`
+```css
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-input {
+    width: 16px;
+    height: 16px;
+}
+```
+
+4. **Usage File**: `src/components/options/extensionToggle.mjs`
+```javascript
+import { Checkbox } from '../forms/checkbox.mjs';
+import { EXTENSION_OPTIONS, OPTION_LABELS } from '../../constants/options/extensionSettings.mjs';
+
+export function ExtensionToggle({ enabled, onToggle }) {
+    return (
+        <Checkbox 
+            checked={enabled} 
+            onChange={onToggle}
+            label={enabled ? OPTION_LABELS.DISABLE : OPTION_LABELS.ENABLE}
+        />
+    );
+}
+```
+
+**INCORRECT IMPLEMENTATION (Single file with everything):**
+```javascript
+// ❌ NEVER DO THIS - Single file with everything
+const EXTENSION_OPTIONS = { ENABLE: 'enable', DISABLE: 'disable' };
+const OPTION_LABELS = { ENABLE: 'Enable', DISABLE: 'Disable' };
+
+function Checkbox() { /* Implementation */ }
+function ExtensionToggle() { /* Implementation */ }
+
+// Styles mixed in JavaScript file
+const styles = { /* CSS in JS - NEVER */ };
+```
+
+## 9. 🚨 **RULE VIOLATION PENALTIES (ENFORCED)**
+
+### Penalties for File Organization Violations
+- **Single File Violation**: If Cursor AI puts multiple components/functions in one file
+  - **Penalty**: Must immediately separate into individual files
+  - **Verification**: Must prove each file has single responsibility
+  - **Documentation**: Must document the violation and correction
+
+- **Duplication Violation**: If Cursor AI creates duplicate code across files
+  - **Penalty**: Must immediately consolidate into shared files
+  - **Verification**: Must prove no duplication exists
+  - **Documentation**: Must document the violation and correction
+
+- **Style Mixing Violation**: If Cursor AI puts styles in JavaScript files
+  - **Penalty**: Must immediately separate styles into CSS files
+  - **Verification**: Must prove styles are in dedicated CSS files
+  - **Documentation**: Must document the violation and correction
+
+### Penalty Levels (ESCALATING)
+1. **First Violation**: Warning + immediate correction required
+2. **Second Violation**: 24-hour suspension from file operations
+3. **Third Violation**: Complete task restart with user supervision
+4. **Fourth Violation**: User must manually approve all future operations
+
+## 10. 🚨 **VERIFICATION CHECKLIST (MANDATORY)**
+
+### Before Creating Any File
+- [ ] **Single responsibility** - file has one clear purpose
+- [ ] **No duplication** - similar functionality doesn't exist elsewhere
+- [ ] **Proper location** - file is in correct subdirectory
+- [ ] **Correct extension** - .mjs for modules, .css for styles, .html for markup
+- [ ] **Clear naming** - file name describes its purpose
+- [ ] **Logical organization** - file follows logical structure standards
+
+### After Creating Any File
+- [ ] **Import organization** - imports are properly organized
+- [ ] **Export clarity** - exports are clear and minimal
+- [ ] **No hardcoded values** - uses constants from appropriate files
+- [ ] **Reusable design** - can be used in multiple contexts
+- [ ] **Logical file size** - file is focused and manageable
+
+## Benefits of Logical File Separation
+
+### Maintainability
+- **Easier to find** specific functionality
+- **Simpler debugging** with focused files
+- **Faster development** with clear organization
+- **Better code reviews** with single-purpose files
+
+### Reusability
+- **Components can be reused** across the project
+- **Functions can be imported** wherever needed
+- **Styles can be shared** between components
+- **Constants can be centralized** for easy updates
+
+### Team Collaboration
+- **Multiple developers** can work on different files
+- **Clear ownership** of specific functionality
+- **Reduced merge conflicts** with focused files
+- **Better code organization** for new team members
+
+### Chrome Web Store Compliance
+- **Professional structure** impresses reviewers
+- **Clear organization** shows development quality
+- **Maintainable code** reduces policy violations
+- **Scalable architecture** supports future updates
+
+## Conclusion
+
+These logical file separation standards ensure that every Chrome extension follows professional organization principles, prevents code duplication, and maximizes reusability. Each file must have a single responsibility and be properly organized in the correct directory structure, using logical separation based on functionality rather than arbitrary limits.
+
+**Remember: One purpose per file, no duplication, maximum reusability, logical organization mandatory!**
+
+## Rule Verification Status
+
+- **Project structure standards**: ✅ ACTIVE
+- **Logical file separation**: ✅ ENFORCED
+- **No duplication rules**: ✅ ENFORCED
+- **Reusability standards**: ✅ ENFORCED
+- **Penalty system**: ✅ OPERATIONAL
+
+**Status: LOGICAL FILE SEPARATION RULES ACTIVE - PROFESSIONAL ORGANIZATION ENFORCED**

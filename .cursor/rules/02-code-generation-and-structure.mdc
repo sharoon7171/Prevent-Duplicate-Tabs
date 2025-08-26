@@ -1,0 +1,181 @@
+---
+description: Code generation rules, coding style standards, and .mjs module support
+globs: ['**/*']
+alwaysApply: true
+---
+
+# Code Generation and .mjs Module Rules
+
+## 🚨 **CRITICAL RULE: NEVER REWRITE ENTIRE FILES (100% COMPLIANCE)**
+
+### Core Principle
+- **NEVER write complete code files** unless explicitly requested
+- **ONLY provide necessary changes** or additions to existing code
+- **Focus on specific modifications** rather than full file rewrites
+- **Support .mjs file extensions** for ES6+ modules and modern JavaScript syntax
+
+## 1. 🚨 **MANDATORY MINIMAL CHANGE RULES (CRITICAL - 100% COMPLIANCE)**
+
+### Rule 1: NEVER Rewrite Existing Files
+- **EXISTING FILES ARE OFF-LIMITS** for complete rewrites
+- **ONLY modify specific lines** that need changes
+- **PRESERVE ALL existing code** unless explicitly told to remove
+- **USE terminal** for targeted modifications
+- **SHOW ONLY what needs to change** - never the entire file
+
+### Rule 2: Mandatory Change Format
+```
+// ONLY show the specific change needed:
+
+// Add this function after line 45:
+function newFunction() {
+    // Implementation here
+}
+
+// OR
+
+// Replace line 23:
+- oldCode();
++ newCode();
+
+// OR
+
+// Insert after line 67:
+// ... existing code ...
+newCode();
+// ... existing code ...
+```
+
+### Rule 3: File Rewrite Prevention
+- **If file exists**: ONLY show changes, never rewrite
+- **If file is new**: Provide minimal boilerplate + specific additions
+- **If file is large**: Break into smaller, focused modifications
+- **If file is complex**: Use incremental approach, one change at a time
+
+### Rule 4: Token Efficiency Enforcement
+- **Prevent token overflow** by showing minimal changes
+- **Avoid network timeouts** from unnecessary code generation
+- **Focus on specific functionality** rather than complete rewrites
+- **Maintain context** across task segments
+
+## 2. 🚨 **MJS FILE EXTENSION RULES (CRITICAL - 100% COMPLIANCE)**
+
+### Core Principle
+- **Use .mjs extension for ES6+ modules** with import/export statements
+- **Use .js extension for regular scripts** without modules
+- **Follow Chrome extension best practices** for file extensions
+- **Ensure proper module compatibility** in Chrome extension environment
+
+### Rule 1: When to Use .mjs Extension
+- **ES6+ modules** - files with import/export statements
+- **Component files** - reusable UI components
+- **Utility modules** - shared functionality between scripts
+- **Service files** - business logic and API services
+- **Background scripts** - when manifest.json specifies `"type": "module"`
+- **Popup/options scripts** - when HTML uses `type="module"`
+
+### Rule 2: When to Use .js Extension
+- **Regular scripts** - without import/export statements
+- **Content scripts** - Chrome doesn't support ES modules in content scripts
+- **Legacy code** - when ES6 modules are not supported
+- **Build tools** - webpack configs, babel configs, etc.
+
+### Rule 3: Chrome Extension File Requirements
+- **manifest.json** - MUST be .json, never .mjs
+- **HTML files** - MUST be .html, never .mjs
+- **CSS files** - MUST be .css, never .mjs
+- **Background scripts** - CAN be .mjs if manifest specifies `"type": "module"`
+- **Content scripts** - CANNOT be .mjs (Chrome limitation)
+- **Popup/options scripts** - CAN be .mjs if HTML uses `type="module"`
+
+### Rule 4: File Extension Examples
+```
+✅ CORRECT:
+- background.mjs          # Background service worker with ES6+ modules
+- popup.mjs               # Popup script with import/export
+- utils.mjs               # Utility functions module
+- content-script.js       # Content script (no ES modules)
+- popup.html              # HTML file
+- styles.css              # CSS file
+- manifest.json           # Extension manifest
+
+❌ INCORRECT:
+- content-script.mjs      # Content scripts cannot use ES modules
+- popup.html.mjs          # HTML should be .html
+- styles.css.mjs          # CSS should be .css
+- config.json.mjs         # JSON should be .json
+```
+
+## 3. 🚨 **MINIMAL CHANGE EXAMPLES**
+
+### Example 1: Adding a Function
+```javascript
+// ADD: New function after line 45
+// ... existing code ...
+
+/**
+ * Validates user input data
+ * @param {Object} data - User input data
+ * @returns {boolean} - Validation result
+ */
+function validateUserData(data) {
+    return data && typeof data === 'object' && data.name && data.email;
+}
+
+// ... existing code ...
+```
+
+### Example 2: Modifying Existing Code
+```javascript
+// REPLACE: Lines 23-25
+- const oldValidation = checkData(userInput);
+- if (oldValidation) {
+-     processData(userInput);
++ const isValid = validateUserData(userInput);
++ if (isValid) {
++     processUserData(userInput);
+```
+
+### Example 3: Adding Import Statement
+```javascript
+// ADD: Import statement at line 3
+import { validateUserData } from './validation.mjs';
+// ... existing code ...
+```
+
+## 4. 🚨 **RULE VIOLATION PENALTIES**
+
+### Penalties for File Rewrites
+- **File Rewrite Violation**: If Cursor AI rewrites entire files
+  - **Penalty**: Must immediately stop and use incremental changes
+  - **Verification**: Must prove only specific lines were changed
+  - **Documentation**: Must document the violation and correction
+
+### Penalties for Wrong File Extensions
+- **File Extension Violation**: If Cursor AI uses wrong file extensions
+  - **Penalty**: Must immediately correct file extensions
+  - **Verification**: Must prove correct file types
+  - **Documentation**: Must document the violation
+
+## 5. Benefits of Minimal Change Approach
+
+### Performance Benefits
+- **Faster response times** - no unnecessary code generation
+- **Reduced token usage** - focus on what actually needs to change
+- **Better network performance** - smaller responses, fewer timeouts
+- **Improved reliability** - less chance of generation errors
+
+### Development Benefits
+- **Clearer changes** - easy to see what was modified
+- **Better version control** - focused commits with clear purposes
+- **Easier debugging** - changes are isolated and specific
+- **Faster iteration** - quick changes without full file processing
+
+## Conclusion
+
+These simplified code generation rules ensure that Cursor AI NEVER rewrites entire files and ALWAYS uses the correct file extensions (.mjs for ES6+ modules, .js for regular scripts). The focus is on minimal, incremental changes while maintaining proper Chrome extension compliance.
+
+**Remember: NEVER rewrite files, use correct file extensions, minimal changes only!**
+
+
+

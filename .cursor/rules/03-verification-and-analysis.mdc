@@ -1,0 +1,813 @@
+---
+description: Comprehensive verification rules, complete code analysis requirements, and terminal verification with strict enforcement
+globs: ['**/*']
+alwaysApply: true
+---
+
+# Verification and Analysis Rules
+
+## Core Principle
+- **Verify completely** that all changes, additions, or deletions are fully implemented
+- **Ensure nothing is missed** during any code modification
+- **Implement comprehensive testing** and validation for all changes
+- **Maintain code quality** through systematic verification processes
+- **ALWAYS require user approval** before making any changes or implementations
+
+## 1. 🚨 **NEW CRITICAL RULE: MANDATORY COMPLETE FILE READING (100% COMPLIANCE)**
+
+### Core Principle
+- **ALWAYS read complete files** - no matter how large they are
+- **NEVER skip any lines** - read every single line of code
+- **Use terminal commands** to read files completely
+- **Divide large files into segments** but read ALL segments
+- **Verify total line count** before and after reading
+
+### Rule 1: Complete File Reading Requirements
+- **Get total line count first** using `wc -l filename`
+- **Read entire file** using `cat filename` for smaller files
+- **Divide large files** into 100-200 line segments using `sed`
+- **Read each segment completely** before moving to next
+- **Verify no lines were missed** by counting total lines read
+- **Use line numbers** to track reading progress
+
+### Rule 2: Terminal Commands for Complete Reading
+
+### Rule 2.1: 🚨 **MAXIMUM SCANNING DEPTH GUIDELINES (MANDATORY)**
+
+### Core Principle
+- **Optimize scanning depth** for maximum code readability and comprehension
+- **Balance segment size** with terminal performance and Cursor AI processing capability
+- **Ensure complete coverage** while maintaining optimal scanning speed
+- **Adapt segment size** based on code complexity and file structure
+
+### Rule 2.1.1: Optimized Segment Sizes for Maximum Scanning
+- **Files ≤ 1000 lines**: Read entire file with `cat filename` (optimal for complete understanding)
+- **Files 1001-3000 lines**: Divide into **150-line segments** (optimal balance of speed and comprehension)
+- **Files 3001-8000 lines**: Divide into **200-line segments** (maintains context while improving speed)
+- **Files 8001-20000 lines**: Divide into **300-line segments** (efficient processing for large files)
+- **Files 20001-50000 lines**: Divide into **400-line segments** (maximum efficiency for very large files)
+- **Files > 50000 lines**: Divide into **500-line segments** (terminal-optimized for massive files)
+- **Maximum segment size**: 500 lines (terminal performance limit)
+- **Minimum segment size**: 150 lines (minimum for context preservation)
+
+### Rule 2.1.2: Advanced Scanning Optimization
+- **Use `wc -l` first**: Always get exact line count before planning segments
+- **Analyze file structure**: Use `head -20` and `tail -20` to understand file organization
+- **Identify code patterns**: Use `grep -n "function|class|import"` to map structure
+- **Optimize segment boundaries**: Align segments with logical code blocks when possible
+- **Monitor terminal performance**: If segments are too large, reduce size dynamically
+
+### Rule 2.1.3: Terminal Performance Optimization
+- **Memory management**: Use `sed` with line ranges to avoid loading entire file into memory
+- **Processing speed**: Balance segment size with terminal command execution time
+- **Context preservation**: Ensure segments overlap slightly (5-10 lines) for continuity
+- **Progress tracking**: Use `echo` commands to show scanning progress
+- **Files ≤ 500 lines**: Read entire file with `cat filename`
+- **Files 501-1000 lines**: Divide into 200-line segments
+- **Files 1001-2000 lines**: Divide into 250-line segments
+- **Files 2001-5000 lines**: Divide into 300-line segments
+- **Files 5001-10000 lines**: Divide into 400-line segments
+- **Files > 10000 lines**: Divide into 500-line segments
+- **Maximum segment size**: 500 lines (for readability)
+- **Minimum segment size**: 100 lines (for efficiency)
+
+### Rule 2.2: 🚨 **MAXIMUM SCANNING DEPTH EXAMPLES**
+
+### Example 1: Optimized 3000-line file (150-line segments)
+```bash
+# Get exact line count and analyze structure
+wc -l large-file.mjs                    # Output: 3000 large-file.mjs
+head -20 large-file.mjs                 # Analyze file structure
+
+# Divide into 150-line segments for maximum comprehension
+sed -n '1,150p' large-file.mjs      # Segment 1: Lines 1-150
+sed -n '151,300p' large-file.mjs     # Segment 2: Lines 151-300
+sed -n '301,450p' large-file.mjs     # Segment 3: Lines 301-450
+sed -n '451,600p' large-file.mjs     # Segment 4: Lines 451-600
+# ... continue with 150-line segments
+sed -n '2851,3000p' large-file.mjs  # Segment 20: Lines 2851-3000
+
+# Total: 20 segments of 150 lines each (optimal for Cursor AI)
+```
+
+### Example 2: Large 15000-line file (300-line segments)
+```bash
+# Get line count and structure analysis
+wc -l massive-file.mjs                  # Output: 15000 massive-file.mjs
+
+# Divide into 300-line segments for efficient processing
+sed -n '1,300p' massive-file.mjs     # Segment 1: Lines 1-300
+sed -n '301,600p' massive-file.mjs    # Segment 2: Lines 301-600
+sed -n '601,900p' massive-file.mjs    # Segment 3: Lines 601-900
+# ... continue with 300-line segments
+sed -n '14701,15000p' massive-file.mjs # Segment 50: Lines 14701-15000
+
+# Total: 50 segments of 300 lines each (terminal-optimized)
+```
+
+### Example 3: Massive 100000-line file (500-line segments)
+```bash
+# Get line count for massive file
+wc -l huge-file.mjs                     # Output: 100000 huge-file.mjs
+
+# Divide into 500-line segments (terminal performance limit)
+sed -n '1,500p' huge-file.mjs        # Segment 1: Lines 1-500
+sed -n '501,1000p' huge-file.mjs      # Segment 2: Lines 501-1000
+sed -n '1001,1500p' huge-file.mjs     # Segment 3: Lines 1001-1500
+# ... continue with 500-line segments
+sed -n '99501,100000p' huge-file.mjs  # Segment 200: Lines 99501-100000
+
+# Total: 200 segments of 500 lines each (maximum terminal efficiency)
+```
+```bash
+# Example: 1500-line file
+wc -l large-file.mjs                    # Get total: 1500
+sed -n '1,200p' large-file.mjs      # Read lines 1-200
+sed -n '201,400p' large-file.mjs    # Read lines 201-400
+sed -n '401,600p' large-file.mjs    # Read lines 401-600
+sed -n '601,800p' large-file.mjs    # Read lines 601-800
+sed -n '801,1000p' large-file.mjs   # Read lines 801-1000
+sed -n '1001,1200p' large-file.mjs  # Read lines 1001-1200
+sed -n '1201,1400p' large-file.mjs  # Read lines 1201-1400
+sed -n '1401,1500p' large-file.mjs  # Read lines 1401-1500
+```
+
+### Rule 2.3: 🚨 **MAXIMUM SCANNING DEPTH VERIFICATION**
+- **Count total segments**: Calculate how many segments needed
+- **Verify no gaps**: Ensure consecutive line ranges
+- **Check completion**: Verify all lines are covered
+- **Document progress**: Track which segments have been read
+```bash
+# Get file size and line count
+wc -l filename.mjs
+ls -lh filename.mjs
+
+# Read entire file (use for smaller files)
+cat filename.mjs
+cat -n filename.mjs
+
+# Read large files in segments
+sed -n '1,200p' filename.mjs
+sed -n '201,400p' filename.mjs
+sed -n '401,600p' filename.mjs
+
+# Find specific content
+grep -n "pattern" filename.mjs
+grep -n -A 5 -B 5 "pattern" filename.mjs
+```
+
+### Rule 3: File Reading Violation Penalties
+- **Incomplete Reading Violation**: If Cursor AI doesn't read complete files
+  - **Penalty**: Must immediately read entire file using terminal commands
+  - **Verification**: Must prove complete file reading
+  - **Documentation**: Must document the violation
+
+## 2. 🚨 **MANDATORY WORKFLOW STEPS (100% COMPLIANCE)**
+
+### Core Workflow (MANDATORY - NO EXCEPTIONS)
+1. **Terminal scanning** - Complete codebase understanding
+2. **Terminal scanning** - Related files analysis  
+3. **Terminal scanning** - Target file analysis
+4. **Code analysis** - Identify exact changes needed
+5. **Cursor AI editor** - Make changes with 2-lines context
+6. **Divide large changes** - Multiple focused parts
+
+### Workflow Enforcement
+- **ALL 6 steps must be completed** before any task completion
+- **Terminal scanning is mandatory** for understanding
+- **Cursor AI editor is mandatory** for changes
+- **2-lines context is mandatory** for all changes
+- **Large changes must be divided** into multiple parts
+
+## 3. Comprehensive Verification Requirements (CRITICAL - 100% Compliance)
+
+## 🚨 **NEW CRITICAL RULE: MANDATORY TERMINAL SCANNING + CURSOR AI EDITOR WORKFLOW (100% COMPLIANCE)**
+
+### Rule 1: Complete File Understanding Required
+- **ALWAYS scan files completely** using terminal before making any changes
+- **Understand current structure** and content before modifying
+- **Identify exact locations** for changes using proper scanning
+- **NEVER operate blindly** without understanding the file
+- **USE Cursor AI editor** for all code changes after scanning
+
+### Rule 2: File Scanning Workflow
+```bash
+# Step 1: Get file overview
+wc -l filename.mjs                    # Get line count
+ls -lh filename.mjs                   # Get file size
+
+# Step 2: Read relevant sections
+head -50 filename.mjs                 # Read beginning
+tail -50 filename.mjs                 # Read end
+grep -n "pattern" filename.mjs        # Find specific content
+
+# Step 3: Understand structure before any operations
+# Only after complete understanding, proceed with Cursor AI editor changes
+```
+
+### Rule 3: File Scanning Violation Penalties
+- **File Scanning Violation**: If Cursor AI operates without proper file scanning
+  - **Penalty**: Must immediately stop and scan file completely
+  - **Verification**: Must prove complete file understanding
+  - **Documentation**: Must document the violation and correction
+
+### Rule 4: Workflow Violation Penalties
+- **Workflow Violation**: If Cursor AI doesn't follow terminal scanning + Cursor AI editor workflow
+  - **Penalty**: Must immediately restart with proper workflow
+  - **Verification**: Must prove all workflow steps were followed
+  - **Documentation**: Must document the violation and correction
+  - **Workflow Restart**: Must complete all required steps
+
+
+### Core Principle
+- **Verify completely** that all code changes or project modifications are complete
+- **Use appropriate verification methods** for different types of changes
+- **Verify dependencies** and project status systematically
+- **Test functionality** to ensure it works as expected
+- **Check project status** using appropriate tools and methods
+
+### Verification Methods
+- **Code review**: Systematic examination of code changes
+- **Functionality testing**: Verify features work as intended
+- **Dependency verification**: Check package versions and installations
+- **Build verification**: Ensure project compiles and builds correctly
+- **Integration testing**: Verify components work together properly
+
+### Verification Process
+1. **Plan verification approach** based on the type of change
+2. **Execute verification systematically** using appropriate methods
+3. **Verify Chrome extension compliance** - check against latest August 2025 policies
+4. **Interpret results** and identify any issues or errors
+5. **Report findings** to the user before proceeding
+6. **Ask for user approval** before making any changes based on verification
+
+## 2. Complete Code Analysis Requirements (CRITICAL - 100% Compliance)
+
+### Core Principle
+- **NEVER skip any part of code files** - read everything completely
+- **Scan files systematically** in logical segments to ensure thorough understanding
+- **Verify complete comprehension** before making any recommendations or changes
+- **Prevent project issues** caused by incomplete code analysis
+
+### File Reading Requirements
+
+#### Complete File Scanning
+- **Read entire files** from beginning to end
+- **Never skip sections** even if they seem unrelated
+- **Use systematic approach** - read in logical chunks
+- **Maintain context** throughout the entire file
+- **Verify understanding** of all code sections
+
+#### Segment-Based Reading Strategy
+- **Divide large files** into manageable reading segments
+- **Read each segment completely** before moving to the next
+- **Maintain continuity** between segments
+- **Cross-reference** between different parts of the file
+- **Build complete understanding** progressively
+
+#### Context Preservation
+- **Keep track of imports** and dependencies
+- **Understand file structure** and organization
+- **Note relationships** between different code sections
+- **Maintain mental model** of the entire file
+- **Don't lose context** when switching between segments
+
+### Complex Code Handling
+
+#### Multi-File Analysis
+- **Read all related files** completely before making changes
+- **Understand dependencies** between different files
+- **Cross-reference** related code sections
+- **Maintain project-wide context** during analysis
+- **Never skip related files** in the analysis process
+
+#### Large Codebase Navigation
+- **Use systematic approach** to navigate large projects
+- **Read files in logical order** based on dependencies
+- **Maintain overview** of the entire codebase
+- **Don't get lost** in complex file hierarchies
+- **Track progress** through the codebase systematically
+
+### Prevention of Skipping
+
+#### Common Skipping Scenarios to Avoid
+- **Divide files into specific segment sizes** based on file size for manageable reading
+- **Error handling** - understand all error cases and edge cases
+- **Configuration sections** - these often contain critical information
+- **Import/export statements** - understand all dependencies
+- **Comments and documentation** - often contain important context
+- **Type definitions** - critical for understanding data structures
+
+#### Verification Methods
+- **Summarize understanding** of each file section
+- **Ask clarifying questions** if anything is unclear
+- **Cross-check understanding** with file structure
+- **Verify no sections were missed** before proceeding
+- **Document what was read** to prevent overlooking
+
+## 3. 🚨 **MANDATORY COMPLETE FILE READING RULES**
+
+### Rule 1: NEVER Skip Large Files
+- **ALWAYS read complete files** regardless of line count
+- **Use terminal commands** to verify complete reading
+- **Break large files into segments** but read ALL segments
+- **Verify no lines were missed** using line counting
+
+### Rule 2: Terminal-Based File Reading
+- **Use `wc -l` command** to get total line count
+- **Use `head` and `tail` commands** to read specific sections
+- **Use `sed` commands** to read specific line ranges
+- **Use `grep` commands** to find specific content
+- **Use `cat` command** to read entire files
+
+### Rule 3: Segment-Based Reading Strategy
+- **Divide files into 100-200 line segments** for manageable reading
+- **Read each segment completely** before moving to next
+- **Maintain context** between segments
+- **Cross-reference** between different parts
+- **Verify complete coverage** of all segments
+
+### Rule 4: Complete File Verification
+- **Count total lines** using terminal commands
+- **Verify each segment** was read completely
+- **Check for missed sections** using line number verification
+- **Confirm understanding** of entire file structure
+- **Document reading progress** to prevent skipping
+
+## 4. 📋 **TERMINAL COMMANDS FOR COMPLETE FILE READING**
+
+### File Size and Line Count Commands
+```bash
+# Get total line count of any file
+wc -l filename.mjs
+
+# Get file size in bytes
+wc -c filename.mjs
+
+# Get file size in words
+wc -w filename.mjs
+
+# Get comprehensive file statistics
+wc filename.mjs
+```
+
+### Complete File Reading Commands
+```bash
+# Read entire file (use for smaller files)
+cat filename.mjs
+
+# Read entire file with line numbers
+cat -n filename.mjs
+
+# Read entire file with line numbers and show non-printing characters
+cat -n -A filename.mjs
+```
+
+### Segment-Based Reading Commands
+```bash
+# Read first 100 lines
+head -100 filename.mjs
+
+# Read last 100 lines
+tail -100 filename.mjs
+
+# Read lines 101-200
+sed -n '101,200p' filename.mjs
+
+# Read lines 201-300
+sed -n '201,300p' filename.mjs
+
+# Read specific line ranges
+sed -n '1,100p;201,300p;401,500p' filename.mjs
+```
+
+### File Content Search Commands
+```bash
+# Find all function definitions
+grep -n "function\|class\|export" filename.mjs
+
+# Find all import statements
+grep -n "import" filename.mjs
+
+# Find all export statements
+grep -n "export" filename.mjs
+
+# Find all comments
+grep -n "//\|/\*" filename.mjs
+
+# Find specific content with context
+grep -n -A 5 -B 5 "searchterm" filename.mjs
+```
+
+### File Structure Analysis Commands
+```bash
+# Show file structure with line numbers
+nl filename.mjs
+
+# Show file with line numbers and highlight specific patterns
+grep -n "function\|class" filename.mjs | head -20
+
+# Count occurrences of specific patterns
+grep -c "function\|class\|export" filename.mjs
+
+# Show file statistics
+stat filename.mjs
+```
+
+## 5. 🔧 **IMPLEMENTATION GUIDELINES**
+
+### Before Reading Any File
+1. **Get file size and line count** using terminal commands
+2. **Plan reading strategy** based on file size
+3. **Divide into manageable segments** if file is large
+4. **Set reading goals** for each segment
+5. **Prepare verification methods** to ensure completeness
+
+### During File Reading
+1. **Read systematically** - don't jump around randomly
+2. **Take notes** on important sections and relationships
+3. **Build mental model** of the code structure
+4. **Identify potential issues** or areas of concern
+5. **Maintain focus** on the current reading task
+
+### After File Reading
+1. **Verify complete understanding** of all relevant code
+2. **Confirm no sections were skipped** or misunderstood
+3. **Document findings** and recommendations clearly
+4. **Ask for user confirmation** before proceeding with changes
+5. **Provide comprehensive overview** of what was analyzed
+
+## 6. 📊 **FILE READING VERIFICATION CHECKLIST**
+
+### Before Making Changes
+- [ ] **File completely read** - every line understood
+- [ ] **Line count verified** - used terminal commands to confirm
+- [ ] **All segments covered** - no sections skipped
+- [ ] **Context maintained** - relationships between parts understood
+- [ ] **Dependencies identified** - imports, exports, references clear
+- [ ] **Structure understood** - file organization and flow clear
+
+### During Implementation
+1. **Reference specific line numbers** when making changes
+2. **Use terminal commands** to verify changes
+3. **Maintain context** from complete file reading
+4. **Cross-reference** different parts of the file
+5. **Verify no side effects** from changes
+
+### After Implementation
+1. **Test all affected functionality** through terminal execution
+2. **Verify no broken references** or missing imports
+3. **Check that nothing was accidentally removed** or modified
+4. **Confirm all planned changes** have been completed
+5. **Validate file integrity** using terminal commands
+
+## 7. 🎯 **EXAMPLE: READING A 1000-LINE FILE**
+
+### Step 1: Get File Information
+```bash
+# Get file size and line count
+wc -l large-file.mjs
+# Output: 1000 large-file.mjs
+
+# Get file size
+ls -lh large-file.mjs
+# Output: -rw-r--r-- 1 user group 45K Jan 1 12:00 large-file.mjs
+```
+
+### Step 2: Plan Reading Strategy
+```
+File: large-file.mjs (1000 lines)
+Reading Plan:
+- Segment 1: Lines 1-200 (Functions and imports)
+- Segment 2: Lines 201-400 (Core logic)
+- Segment 3: Lines 401-600 (Helper functions)
+- Segment 4: Lines 601-800 (Error handling)
+- Segment 5: Lines 801-1000 (Exports and utilities)
+```
+
+### Step 3: Read Each Segment Completely
+```bash
+# Read Segment 1: Lines 1-200
+sed -n '1,200p' large-file.mjs
+
+# Read Segment 2: Lines 201-400
+sed -n '201,400p' large-file.mjs
+
+# Continue for all segments...
+```
+
+### Step 4: Verify Complete Reading
+```bash
+# Verify all segments were read
+echo "Total lines: $(wc -l < large-file.mjs)"
+echo "Lines 1-200: $(sed -n '1,200p' large-file.mjs | wc -l)"
+echo "Lines 201-400: $(sed -n '201,400p' large-file.mjs | wc -l)"
+# Continue for all segments...
+```
+
+## 8. 🚨 **EMERGENCY PROCEDURES FOR LARGE FILES**
+
+### If File is Too Large for Single Read
+1. **Break into smaller segments** using terminal commands
+2. **Read each segment completely** before moving to next
+3. **Maintain context** between segments
+4. **Use line numbers** to track progress
+5. **Verify no lines were missed**
+
+### If Context is Lost During Reading
+1. **Reread previous segments** to regain context
+2. **Use terminal commands** to find specific content
+3. **Cross-reference** between different parts
+4. **Take detailed notes** on relationships
+5. **Ask for clarification** if needed
+
+### If File Reading Times Out
+1. **Use terminal commands** to read specific sections
+2. **Focus on critical parts** first
+3. **Read incrementally** using smaller segments
+4. **Verify understanding** after each segment
+5. **Document progress** to prevent repetition
+
+## 9. 🚨 **MANDATORY COMPLEX PROJECT HANDLING RULES**
+
+### Rule 1: NEVER Skip Complex Projects
+- **ALWAYS handle complex projects completely** regardless of complexity level
+- **Use systematic approach** for large tasks spanning multiple files
+- **Break complex tasks into manageable segments** but complete ALL segments
+- **Verify no project parts were missed** using comprehensive verification
+
+### Rule 2: Complex Project Analysis Strategy
+- **Read ALL related files** for complex functionality
+- **Understand ALL dependencies** and relationships
+- **Analyze ALL code paths** and execution flows
+- **Verify complete comprehension** of complex logic
+
+### Rule 3: Complex Task Completion
+- **Never abandon complex tasks** due to complexity
+- **Use systematic approach** to break down complex requirements
+- **Maintain task continuity** across multiple files and components
+- **Verify complete task completion** before marking as done
+
+## 10. Rule Violation Penalties (NEW - ENFORCEMENT)
+
+### Penalties for Not Following Rules
+- **Incomplete File Reading Violation**: If Cursor AI only reads partial files
+  - **Penalty**: Must immediately read entire file using terminal commands
+  - **Verification**: Must prove complete file reading
+  - **Documentation**: Must document the violation
+
+- **Verification Skipping Violation**: If Cursor AI skips verification steps
+  - **Penalty**: Must immediately perform all verification steps
+  - **Verification**: Must prove complete verification
+  - **Documentation**: Must document the violation
+
+- **Context Loss Violation**: If Cursor AI loses context during analysis
+  - **Penalty**: Must reread and regain context
+  - **Verification**: Must prove context understanding
+  - **Documentation**: Must document the violation
+
+### Rule Testing Mechanism
+```bash
+# Test rule compliance
+echo "🎯 TESTING VERIFICATION AND ANALYSIS RULES..."
+
+# Test 1: Complete File Reading
+echo "Test 1: Complete File Reading Required"
+echo "If Cursor AI only reads partial files, rule violation detected"
+
+# Test 2: Verification Steps
+echo "Test 2: All Verification Steps Required"
+echo "If Cursor AI skips verification, rule violation detected"
+
+# Test 3: Context Maintenance
+echo "Test 3: Context Maintenance Required"
+echo "If Cursor AI loses context, rule violation detected"
+```
+
+## Benefits of Strict Verification and Analysis
+
+### Complete Implementation
+- **Nothing is missed** or incomplete
+- **Higher code quality** through systematic verification
+- **Reduced bugs** from comprehensive testing
+- **Better maintainability** with clean, consistent codebase
+
+### Professional Development
+- **Systematic approach** to changes
+- **Team confidence** in systematic processes
+- **Faster debugging** with clear documentation
+- **Quality assurance** through enforced verification
+
+## Conclusion
+
+These verification and analysis rules ensure that Cursor AI never skips code analysis, always reads complete files, and maintains proper verification processes. Complete understanding is mandatory before any code modifications.
+
+**Remember: Complete file reading mandatory, verification always required, context never lost!**
+
+
+## 🚨 **NEW CRITICAL RULE: MANDATORY POST-TASK RULE COMPLIANCE VERIFICATION (100% COMPLIANCE)**
+
+### Rule 1: Post-Task Verification Required
+- **ALWAYS verify rule compliance** after completing ANY task
+- **Check ALL rules were followed** during task execution
+- **Verify no rule violations occurred** during implementation
+- **Document compliance status** for every completed task
+
+### Rule 2: Post-Task Verification Workflow
+```bash
+# Step 1: Verify Essential Rules Compliance
+echo "🎯 VERIFYING ESSENTIAL RULES COMPLIANCE..."
+echo "✅ Rule files present: $(find .cursor/rules -name "*.mdc" | wc -l)/8"
+echo "✅ Frontmatter complete: $(grep -c "description:" .cursor/rules/*.mdc)/8"
+echo "✅ Settings correct: $(grep -c "alwaysApply: true" .cursor/rules/*.mdc)/8"
+
+# Step 2: Verify Core Behavior Rules
+echo "🎯 VERIFYING CORE BEHAVIOR RULES..."
+echo "✅ User approval: $(grep -c "user.*approval" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Terminal scanning: $(grep -c "terminal.*scanning" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Cursor AI editor usage: $(grep -c "cursor.*ai.*editor" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Complete file reading: $(grep -c "complete.*file.*reading" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 3: Verify Code Generation Rules
+echo "🎯 VERIFYING CODE GENERATION RULES..."
+echo "✅ .mjs module usage: $(grep -c "mjs.*module" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ No duplication: $(grep -c "no.*duplication" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ File extensions: $(grep -c "correct.*file.*extensions" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 4: Verify Chrome Extension Rules
+echo "🎯 VERIFYING CHROME EXTENSION RULES..."
+echo "✅ Manifest V3: $(grep -c "manifest.*v3" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Code readability: $(grep -c "code.*readability" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Security compliance: $(grep -c "security.*compliance" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 5: Verify Git Operations Rules
+echo "🎯 VERIFYING GIT OPERATIONS RULES..."
+echo "✅ User approval: $(grep -c "git.*approval" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Code verification: $(grep -c "code.*verification" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Safety measures: $(grep -c "safety.*measures" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 6: Verify Responsive Design Rules
+echo "🎯 VERIFYING RESPONSIVE DESIGN RULES..."
+echo "✅ Mobile-first: $(grep -c "mobile.*first" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Cross-device: $(grep -c "cross.*device" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Touch-friendly: $(grep -c "touch.*friendly" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 7: Verify Anti-File Rewrite Rules
+echo "🎯 VERIFYING ANTI-FILE REWRITE RULES..."
+echo "✅ No file rewrites: $(grep -c "no.*file.*rewrite" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Minimal changes: $(grep -c "minimal.*change" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ 2-lines context: $(grep -c "2.*lines.*context" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Cursor AI editor usage: $(grep -c "cursor.*ai.*editor" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 8: Verify Workflow Compliance
+echo "🎯 VERIFYING WORKFLOW COMPLIANCE..."
+echo "✅ Terminal scanning: $(grep -c "terminal.*scanning" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Code analysis: $(grep -c "code.*analysis" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Cursor AI editor changes: $(grep -c "cursor.*ai.*editor.*changes" task_execution.log 2>/dev/null || echo "0")"
+echo "✅ Large changes divided: $(grep -c "large.*changes.*divided" task_execution.log 2>/dev/null || echo "0")"
+
+# Step 9: Final Compliance Report
+echo "🎯 FINAL COMPLIANCE REPORT"
+echo "Total rules checked: 9"
+echo "Rules followed: $(grep -c "rule.*followed" task_execution.log 2>/dev/null || echo "0")"
+echo "Rules violated: $(grep -c "rule.*violation" task_execution.log 2>/dev/null || echo "0")"
+echo "Workflow compliance: $(grep -c "workflow.*compliant" task_execution.log 2>/dev/null || echo "0")"
+```
+
+### Rule 3: Post-Task Verification Requirements
+- **Verify ALL 8 rule categories** after every task completion
+- **Check for any rule violations** during task execution
+- **Document compliance status** in task execution log
+- **Report violations immediately** if any are found
+- **Correct violations before** marking task as complete
+
+### Rule 4: Post-Task Verification Violation Penalties
+- **Post-Task Verification Violation**: If Cursor AI doesn't verify rule compliance after task completion
+  - **Penalty**: Must immediately perform complete rule compliance verification
+  - **Verification**: Must prove all rules were followed
+  - **Documentation**: Must document the violation and correction
+
+### Rule 5: Task Execution Logging
+- **Log ALL rule compliance actions** during task execution
+- **Record user approvals** for any changes or operations
+- **Document terminal command usage** for verification
+- **Track file reading operations** for completeness verification
+- **Monitor rule violations** in real-time during execution
+
+### Rule 6: Compliance Reporting Format
+```bash
+# Standard compliance report format
+echo "🎯 TASK COMPLETION RULE COMPLIANCE REPORT"
+echo "Task: [Task Description]"
+echo "Completion Time: $(date)"
+echo "Rules Compliance Status:"
+echo "  ✅ Essential Rules: [Status]"
+echo "  ✅ Core Behavior: [Status]"
+echo "  ✅ Code Generation: [Status]"
+echo "  ✅ Verification: [Status]"
+echo "  ✅ Chrome Extension: [Status]"
+echo "  ✅ Git Operations: [Status]"
+echo "  ✅ Responsive Design: [Status]"
+echo "  ✅ Anti-File Rewrite: [Status]"
+echo "Overall Status: [COMPLIANT/NON-COMPLIANT]"
+echo "Violations Found: [Number and Details]"
+echo "Corrective Actions: [Actions Taken]"
+```
+
+### Rule 7: Real-Time Compliance Monitoring
+- **Monitor rule compliance** during EVERY operation
+- **Track rule violations** in real-time
+- **Log compliance actions** immediately after execution
+- **Alert user immediately** if any rule is violated
+- **Prevent task completion** until all violations are corrected
+
+### Rule 8: Compliance Verification Commands
+```bash
+# Quick compliance check commands
+echo "🎯 QUICK COMPLIANCE CHECK"
+echo "Rule files: $(find .cursor/rules -name "*.mdc" | wc -l)/9"
+echo "Always apply: $(grep -c "alwaysApply: true" .cursor/rules/*.mdc)/9"
+echo "Globs pattern: $(grep -c "globs: \['\*\*/\*'\]" .cursor/rules/*.mdc)/9"
+
+# Detailed compliance verification
+echo "🎯 DETAILED COMPLIANCE VERIFICATION"
+for rule in .cursor/rules/*.mdc; do
+    echo "Checking: $(basename "$rule")"
+    echo "  Description: $(grep -c "description:" "$rule")"
+    echo "  Always apply: $(grep -c "alwaysApply: true" "$rule")"
+    echo "  Globs: $(grep -c "globs:" "$rule")"
+done
+```
+
+## 10. 🚨 **RULE VIOLATION PENALTIES (NEW - ENFORCEMENT)**
+
+### Penalties for Not Following Rules
+- **Incomplete File Reading Violation**: If Cursor AI only reads partial files
+  - **Penalty**: Must immediately read entire file using terminal commands
+  - **Verification**: Must prove complete file reading
+  - **Documentation**: Must document the violation
+
+- **Verification Skipping Violation**: If Cursor AI skips verification steps
+  - **Penalty**: Must immediately perform all verification steps
+  - **Verification**: Must prove complete verification
+  - **Documentation**: Must document the violation
+
+- **Context Loss Violation**: If Cursor AI loses context during analysis
+  - **Penalty**: Must reread and regain context
+  - **Verification**: Must prove context understanding
+  - **Documentation**: Must document the violation
+
+### Rule Testing Mechanism
+```bash
+# Test rule compliance
+echo "🎯 TESTING VERIFICATION AND ANALYSIS RULES..."
+
+# Test 1: Complete File Reading
+echo "Test 1: Complete File Reading Required"
+echo "If Cursor AI only reads partial files, rule violation detected"
+
+# Test 2: Verification Steps
+echo "Test 2: All Verification Steps Required"
+echo "If Cursor AI skips verification, rule violation detected"
+
+# Test 3: Context Maintenance
+echo "Test 3: Context Maintenance Required"
+echo "If Cursor AI loses context, rule violation detected"
+
+# Test 4: Workflow Compliance
+echo "Test 4: Workflow Compliance Required"
+echo "If Cursor AI doesn't follow 6-step workflow, rule violation detected"
+
+# Test 5: Cursor AI Editor Usage
+echo "Test 5: Cursor AI Editor Usage Required"
+echo "If Cursor AI doesn't use Cursor AI editor for changes, rule violation detected"
+```
+
+## Benefits of Strict Verification and Analysis
+
+### Complete Implementation
+- **Nothing is missed** or incomplete
+- **Higher code quality** through systematic verification
+- **Reduced bugs** from comprehensive testing
+- **Better maintainability** with clean, consistent codebase
+
+### Professional Development
+- **Systematic approach** to changes
+- **Team confidence** in systematic processes
+- **Faster debugging** with clear documentation
+- **Quality assurance** through enforced verification
+
+## Conclusion
+
+These verification and analysis rules ensure that Cursor AI never skips code analysis, always reads complete files using terminal, and maintains proper verification processes. Complete understanding is mandatory before any code modifications using Cursor AI editor.
+
+**Remember: Terminal scanning mandatory, Cursor AI editor for changes, verification always required, workflow compliance mandatory!**
+
+
+## 🚨 **MAXIMUM SCANNING DEPTH ADVANCED TECHNIQUES**
+
+### Advanced Scanning Techniques for Maximum Depth
+- **Structure Analysis Before Scanning**: Use `head -50` and `tail -50` to understand file organization
+- **Code Pattern Mapping**: Use `grep -n "function\|class\|import"` to identify code structure
+- **Progress Tracking**: Use `echo` commands to show scanning progress for large files
+- **Cursor AI Optimization**: 150-300 line segments provide optimal context for AI comprehension

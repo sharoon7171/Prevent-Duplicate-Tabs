@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prevent Duplicate Tabs - Options</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="options-container">
+        <header>
+            <h1>Prevent Duplicate Tabs</h1>
+            <p>Extension Options</p>
+        </header>
+        <main>
+            <div class="options-form">
+                <div class="option-group">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="extensionEnabled" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="option-label">
+                        <h3>Enable Extension</h3>
+                        <p>Turn the extension on or off completely. When enabled, automatically prevents duplicate tabs.</p>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="removeDuplicates" class="btn btn-primary">Remove Existing Duplicates</button>
+                    <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; <a href="https://sqtech.dev" target="_blank">SQ Tech</a></p>
+        </footer>
+    </div>
+    <script type="module" src="options.mjs"></script>
+</body>
+</html>

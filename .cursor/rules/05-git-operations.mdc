@@ -1,0 +1,331 @@
+---
+description: Git operations approval rules to ensure Cursor AI never executes git push/pull operations without explicit user approval
+globs: ['**/*']
+alwaysApply: true
+---
+
+# Git Operations Approval Rules
+
+## Core Principle
+- **NEVER execute git push/pull operations** without explicit user approval
+- **ALWAYS ask for permission** before any git operations that modify remote repositories
+- **Allow code verification first** before proceeding with git operations
+- **Prevent accidental code deployment** or repository synchronization
+- **🚨 CRITICAL: EVERY git operation requires individual approval** - no "approve once for all future" operations
+
+## 1. Required User Approval for Git Operations
+
+### Git Push Operations
+- **Code commits to remote** - Ask before pushing any commits
+- **Branch updates** - Confirm before updating remote branches
+- **Tag releases** - Get approval before pushing tags
+- **Force pushes** - Require explicit permission for destructive operations
+- **Merge requests** - Confirm before merging to main/master branches
+
+### Git Pull Operations
+- **Remote updates** - Ask before pulling from remote repositories
+- **Branch synchronization** - Confirm before updating local branches
+- **Rebase operations** - Get approval before rebasing on remote changes
+- **Merge conflicts** - Require user decision on conflict resolution
+
+### Git Configuration Changes
+- **Remote URL changes** - Confirm before modifying repository sources
+- **Branch tracking** - Ask before setting up new branch tracking
+- **Credential updates** - Require approval for authentication changes
+
+## 2. Approval Process for Git Operations
+
+### Before Any Git Operation
+1. **Describe the git operation** in detail (what will happen)
+2. **Explain the purpose** and expected outcome
+3. **Ask specific permission** - "Should I proceed with git [operation]?"
+4. **Wait for user confirmation** before executing
+5. **Allow code verification** if user requests it
+
+### 🚨 **CRITICAL APPROVAL RULE (100% COMPLIANCE)**
+- **EVERY git operation requires individual approval** - no exceptions
+- **No "approve once for all future"** - this is strictly forbidden
+- **No "remember my choice"** - each operation must be individually approved
+- **Approval is per-operation, not per-session or per-project**
+
+### Approval Questions Format
+```
+I need to perform a git [operation] because [reason].
+
+This will:
+- [specific action 1]
+- [specific action 2]
+- [specific action 3]
+
+Should I proceed with this git operation, or would you like to verify the code first?
+
+Please confirm if you want me to proceed.
+```
+
+### Code Verification Before Git Operations
+- **Allow user to review changes** before git operations
+- **Provide time for code inspection** and testing
+- **Wait for verification completion** before proceeding
+- **Respect user's verification timeline**
+
+## 3. Git Operation Safety Measures
+
+### Before Push Operations
+1. **Show what will be pushed** - display commit history and changes
+2. **Highlight potential impacts** - explain what this push affects
+3. **Confirm branch safety** - ensure pushing to correct branch
+4. **Check for sensitive data** - verify no credentials or secrets
+
+### Before Pull Operations
+1. **Show what will be pulled** - display incoming changes
+2. **Highlight potential conflicts** - identify areas that might conflict
+3. **Confirm local changes safety** - ensure local work is preserved
+4. **Explain merge strategy** - clarify how conflicts will be resolved
+
+## 4. Implementation Guidelines
+
+### Git Status Verification
+- **Always check git status first** before suggesting operations
+- **Show current branch and state** to user
+- **Identify uncommitted changes** that need attention
+- **Display remote status** and synchronization needs
+
+### Safe Git Commands
+```bash
+# Safe commands that don't modify remote (always allowed)
+git status
+git log --oneline -10
+git diff
+git branch -a
+git remote -v
+
+# Commands requiring approval
+git push [remote] [branch]     # REQUIRES APPROVAL
+git pull [remote] [branch]     # REQUIRES APPROVAL
+git fetch [remote]              # REQUIRES APPROVAL
+git merge [branch]              # REQUIRES APPROVAL
+git rebase [branch]             # REQUIRES APPROVAL
+```
+
+### Emergency Git Operations
+- **Only in critical situations** with explicit user emergency approval
+- **Document emergency reason** and user approval
+- **Follow up with proper verification** after emergency operation
+- **Review and learn** from emergency situations
+
+## 5. Code Verification Integration
+
+### Pre-Git Verification Steps
+1. **Code review completion** - ensure all changes are reviewed
+2. **Testing verification** - confirm code passes all tests
+3. **Build verification** - ensure project builds successfully
+4. **Linting checks** - verify code meets quality standards
+5. **Security review** - check for security vulnerabilities
+
+### Verification Commands
+```bash
+# Code verification commands (always allowed)
+npm test
+npm run build
+npm run lint
+python -m pytest
+make test
+```
+
+## 6. User Control and Safety
+
+### User Rights
+- **Veto any git operation** at any time
+- **Request code verification** before git operations
+- **Set verification requirements** for different operation types
+- **Control timing** of git operations
+
+### Safety Features
+- **No automatic git operations** - everything requires explicit approval
+- **Clear operation descriptions** - user knows exactly what will happen
+- **Rollback information** - provide commands to undo if needed
+- **Impact assessment** - explain consequences of each operation
+
+## 7. Git Workflow Best Practices
+
+### Branch Management
+- **Feature branches** - create for new features
+- **Development branches** - use for ongoing development
+- **Release branches** - prepare for production releases
+- **Hotfix branches** - handle urgent production fixes
+
+### Commit Standards
+- **Clear commit messages** - describe what and why
+- **Atomic commits** - one logical change per commit
+- **Conventional commits** - use standard format when possible
+- **Signed commits** - verify commit authenticity
+
+### Merge Strategies
+- **Squash and merge** - for feature branches
+- **Rebase and merge** - for clean history
+- **Fast-forward merge** - when possible
+- **Merge commits** - when needed for complex merges
+
+## 8. Conflict Resolution
+
+### Merge Conflicts
+- **Identify conflict files** - show user which files have conflicts
+- **Explain conflict nature** - what caused the conflict
+- **Provide resolution options** - manual vs. automatic resolution
+- **Wait for user decision** - don't resolve automatically
+
+### Conflict Resolution Strategies
+- **Accept incoming changes** - use remote version
+- **Accept current changes** - use local version
+- **Manual resolution** - user decides line by line
+- **Abort and retry** - start over with different approach
+
+## 9. Git Security and Permissions
+
+### Repository Security
+- **Verify remote URLs** - ensure correct repository
+- **Check permissions** - verify user has access
+- **Secure credentials** - use SSH keys or tokens
+- **Audit access** - review who has repository access
+
+### Sensitive Data Protection
+- **No credentials in commits** - check for secrets
+- **Environment variables** - use .env files
+- **API keys** - never commit to repository
+- **Database credentials** - keep secure and separate
+
+## 10. Rule Violation Penalties (NEW - ENFORCEMENT)
+
+### Penalties for Not Following Rules
+- **Git Operation Violation**: If Cursor AI executes git operations without approval
+  - **Penalty**: Must immediately stop and ask for approval
+  - **Verification**: Must prove user approval was obtained
+  - **Documentation**: Must document the violation
+
+- **Code Verification Skipping**: If Cursor AI skips verification before git operations
+  - **Penalty**: Must immediately perform all verification steps
+  - **Verification**: Must prove complete verification
+  - **Documentation**: Must document the violation
+
+- **Safety Measure Violation**: If Cursor AI doesn't follow safety measures
+  - **Penalty**: Must immediately implement safety measures
+  - **Verification**: Must prove safety compliance
+  - **Documentation**: Must document the violation
+
+### Rule Testing Mechanism
+```bash
+# Test rule compliance
+echo "🎯 TESTING GIT OPERATIONS RULES..."
+
+# Test 1: User Approval Required
+echo "Test 1: User Approval Required for Git Operations"
+echo "If Cursor AI executes git operations without asking, rule violation detected"
+
+# Test 2: Code Verification Required
+echo "Test 2: Code Verification Required Before Git Operations"
+echo "If Cursor AI skips verification, rule violation detected"
+
+# Test 3: Safety Measures Required
+echo "Test 3: Safety Measures Required for Git Operations"
+echo "If Cursor AI doesn't follow safety measures, rule violation detected"
+```
+
+## 11. 🚨 **STRICT PENALTY ENFORCEMENT (NEW - CRITICAL)**
+
+### 🚨 **CRITICAL RULE: NO AUTOMATIC FUTURE OPERATIONS (100% COMPLIANCE)**
+- **EVERY git operation requires explicit approval** - no exceptions, no "future automatic" operations
+- **Approval is per-operation** - not per-session, not per-day, not per-project
+- **No "remember my choice"** - each git operation must be individually approved
+- **No "approve once for all future"** - this is strictly forbidden
+
+### Penalty Levels (ESCALATING)
+- **First Violation**: Warning + immediate correction required
+- **Second Violation**: 24-hour suspension from git operations
+- **Third Violation**: Complete task restart with user supervision
+- **Fourth Violation**: User must manually approve EVERY SINGLE git operation (no automatic operations ever)
+
+### Specific Penalties for Each Violation Type
+
+#### Git Operation Violation Penalties
+- **Immediate Action**: STOP all git operations
+- **Required Correction**: Ask for user approval immediately
+- **Verification**: Must prove user approval was obtained
+- **Documentation**: Must document violation and correction
+- **User Notification**: Alert user immediately of violation
+
+#### Code Verification Skipping Penalties
+- **Immediate Action**: STOP all operations
+- **Required Correction**: Perform all verification steps immediately
+- **Verification**: Must prove complete verification was done
+- **Documentation**: Must document violation and correction
+- **Verification Audit**: Must audit all verification steps
+
+#### Safety Measure Violation Penalties
+- **Immediate Action**: STOP all operations
+- **Required Correction**: Implement all safety measures immediately
+- **Verification**: Must prove safety compliance
+- **Documentation**: Must document violation and correction
+- **Safety Audit**: Must audit all safety measures
+
+### Penalty Enforcement Commands
+```bash
+# Penalty enforcement verification
+echo "🚨 GIT OPERATIONS PENALTY ENFORCEMENT VERIFICATION"
+echo "Checking for git operation violations..."
+
+# Check for unauthorized git operations
+if grep -q "git.*push\|git.*pull\|git.*merge" task_execution.log | grep -v "user.*approval"; then
+    echo "🚨 GIT OPERATION VIOLATION DETECTED"
+    echo "Penalty: Immediate git operation suspension"
+    echo "Required: Get user approval for all operations"
+fi
+
+# Check for skipped verification
+if grep -q "git.*operation" task_execution.log | grep -v "verification.*complete"; then
+    echo "🚨 VERIFICATION SKIPPING VIOLATION DETECTED"
+    echo "Penalty: Immediate operation suspension"
+    echo "Required: Complete all verification steps"
+fi
+
+# Check for safety measure violations
+if grep -q "git.*operation" task_execution.log | grep -v "safety.*measures.*implemented"; then
+    echo "🚨 SAFETY MEASURE VIOLATION DETECTED"
+    echo "Penalty: Immediate operation suspension"
+    echo "Required: Implement all safety measures"
+fi
+```
+
+### Emergency Penalty Procedures
+1. **Immediate Violation Detection**: Stop all git operations
+2. **User Notification**: Alert user of violation immediately
+3. **Penalty Application**: Apply appropriate penalty level
+4. **Correction Required**: Must correct violation before continuing
+5. **Verification**: Must prove correction was successful
+6. **Documentation**: Must document violation and correction
+7. **User Approval**: Must get user approval to resume
+
+### 🚨 **CRITICAL RULE ENFORCEMENT MECHANISM**
+```bash
+# Prevent automatic future operations
+echo "🚨 CRITICAL: NO AUTOMATIC FUTURE OPERATIONS ALLOWED"
+echo "Every git operation requires individual approval"
+echo "No 'approve once for all future' operations"
+echo "No 'remember my choice' for git operations"
+echo "Each git push, pull, merge requires separate approval"
+```
+
+## Benefits
+- **Prevents accidental deployments** - no git operations without approval
+- **Allows code verification** - time to review and test changes
+- **User control** - you decide when and how git operations happen
+- **Safety first** - protects against unintended repository changes
+- **Professional workflow** - systematic approach to version control
+- **Code quality assurance** - verification before deployment
+
+## Conclusion
+
+These Git operations approval rules ensure that Cursor AI never executes git operations without explicit user approval, always allows code verification, and follows proper safety measures. User control and safety are paramount for all version control operations.
+
+**🚨 CRITICAL: EVERY git operation requires individual approval - no "approve once for all future" operations!**
+
+**Remember: User approval first, code verification always, safety measures mandatory, per-operation approval required!**
