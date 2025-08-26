@@ -1,27 +1,51 @@
 // Duplicate tab prevention utility functions
 import { getExtensionSettings } from './storageUtils.mjs';
+import { isUrlWhitelisted } from './whitelistUtils.mjs';
+
+// Helper function to normalize URLs for consistent comparison
+function normalizeUrl(url) {
+    try {
+        // If it's a valid URL, normalize it
+        const urlObj = new URL(url);
+        // Remove www prefix and normalize hostname
+        const hostname = urlObj.hostname.replace(/^www\./, '');
+        // Keep path but remove trailing slash
+        const path = urlObj.pathname.replace(/\/$/, '');
+        return hostname + path;
+    } catch (error) {
+        // If it's not a valid URL, assume it's a domain
+        // Remove protocol if present
+        const cleanUrl = url.replace(/^https?:\/\//, '');
+        // Remove www prefix
+        const withoutWww = cleanUrl.replace(/^www\./, '');
+        // Keep path but remove query parameters, fragments, and trailing slash
+        const normalized = withoutWww.split('?')[0].split('#')[0].replace(/\/$/, '');
+        return normalized;
+    }
+}
 
 // Helper function to compare URLs based on sensitivity setting
 function compareUrls(url1, url2, sensitivity) {
     try {
-        if (!url1 || !url2) return false;
-        
         switch (sensitivity) {
             case 'exactUrl':
-                // Exact match - compare full URLs
-                return url1 === url2;
+                // Use normalizeUrl for consistent comparison
+                const normalizedUrl1 = normalizeUrl(url1);
+                const normalizedUrl2 = normalizeUrl(url2);
+                return normalizedUrl1 === normalizedUrl2;
                 
             case 'ignoreParameters':
-                // Ignore query parameters and fragments, but keep path
-                const url1Clean = url1.split('?')[0].split('#')[0];
-                const url2Clean = url2.split('?')[0].split('#')[0];
-                return url1Clean === url2Clean;
+                // Use normalizeUrl for consistent comparison
+                const normalizedUrl1Ignore = normalizeUrl(url1);
+                const normalizedUrl2Ignore = normalizeUrl(url2);
+                return normalizedUrl1Ignore === normalizedUrl2Ignore;
                 
             case 'exactDomain':
                 // Only compare domain, ignore path, parameters, and fragments
                 const url1Obj = new URL(url1);
                 const url2Obj = new URL(url2);
-                return url1Obj.hostname === url2Obj.hostname;
+                // Remove www for consistent comparison
+                return url1Obj.hostname.replace(/^www\./, '') === url2Obj.hostname.replace(/^www\./, '');
                 
             default:
                 return url1 === url2;
@@ -39,6 +63,13 @@ export async function checkAndCloseDuplicateTabs(newTabId, newTabUrl) {
         // If extension is disabled, don't do anything
         if (!settings.extensionEnabled) {
             return;
+        }
+        
+        // Check if the new URL is whitelisted
+        const isWhitelisted = await isUrlWhitelisted(newTabUrl);
+        if (isWhitelisted) {
+            console.log('URL is whitelisted, allowing duplicate:', newTabUrl);
+            return 0; // Allow the duplicate
         }
         
         // Get all tabs
@@ -120,21 +151,29 @@ export async function removeAllDuplicateTabs() {
         
         // Group tabs by URL based on sensitivity setting
         const urlGroups = {};
-        allTabs.forEach(tab => {
+        for (const tab of allTabs) {
             if (!tab.pinned && tab.url) {
+                // Check if this tab's URL is whitelisted
+                const isWhitelisted = await isUrlWhitelisted(tab.url);
+                if (isWhitelisted) {
+                    console.log('Skipping whitelisted URL in duplicate removal:', tab.url);
+                    continue; // Skip whitelisted URLs
+                }
+                
                 let groupKey;
                 
                 switch (settings.urlSensitivity) {
                     case 'exactUrl':
-                        groupKey = tab.url;
+                        groupKey = normalizeUrl(tab.url);
                         break;
                     case 'ignoreParameters':
-                        groupKey = tab.url.split('?')[0].split('#')[0];
+                        groupKey = normalizeUrl(tab.url);
                         break;
                     case 'exactDomain':
                         try {
                             const urlObj = new URL(tab.url);
-                            groupKey = urlObj.hostname;
+                            // Remove www for consistent grouping
+                            groupKey = urlObj.hostname.replace(/^www\./, '');
                         } catch (error) {
                             groupKey = tab.url;
                         }
@@ -148,7 +187,7 @@ export async function removeAllDuplicateTabs() {
                 }
                 urlGroups[groupKey].push(tab);
             }
-        });
+        }
         
         // Find and close duplicate tabs based on strategy
         let totalClosed = 0;
@@ -187,6 +226,12 @@ export async function isDuplicateTab(url) {
         // If extension is disabled, nothing is a duplicate
         if (!settings.extensionEnabled) {
             return false;
+        }
+        
+        // Check if the URL is whitelisted
+        const isWhitelisted = await isUrlWhitelisted(url);
+        if (isWhitelisted) {
+            return false; // Whitelisted URLs are never considered duplicates
         }
         
         // Get all tabs

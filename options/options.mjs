@@ -1,6 +1,7 @@
 // Options page script for Prevent Duplicate Tabs extension
 
 import { getExtensionSettings, setExtensionEnabled, setDuplicateStrategy, setUrlSensitivity, initializeDefaultSettings } from '../src/functions/utils/storageUtils.mjs';
+import { WhitelistManager } from '../src/components/ui/whitelistManager.mjs';
 
 console.log('Prevent Duplicate Tabs extension options page loaded');
 
@@ -46,6 +47,18 @@ async function initializeOptions() {
         // Hide loading overlay and show options form
         loadingOverlay.style.display = 'none';
         optionsForm.style.display = 'flex';
+        
+        // Initialize whitelist manager
+        console.log('Options: Initializing whitelist manager...');
+        const whitelistContainer = document.getElementById('whitelistContainer');
+        console.log('Options: Whitelist container found:', whitelistContainer);
+        
+        if (whitelistContainer) {
+            const whitelistManager = new WhitelistManager('whitelistContainer');
+            console.log('Options: Whitelist manager created:', whitelistManager);
+        } else {
+            console.error('Options: Whitelist container not found!');
+        }
         
         // Welcome message logged to console instead of showing toast
         console.log('Welcome to Prevent Duplicate Tabs settings!');
@@ -180,6 +193,9 @@ function clearAllToasts() {
 function showStatus(message, type = 'info') {
     return showToast(message, type, 4000);
 }
+
+// Make showToast globally available for other components
+window.showToast = showToast;
 
 // Handle extension enabled/disabled toggle
 extensionEnabledCheckbox.addEventListener('change', async (event) => {
