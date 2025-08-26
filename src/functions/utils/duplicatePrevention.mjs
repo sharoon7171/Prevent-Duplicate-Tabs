@@ -20,15 +20,51 @@ export async function checkAndCloseDuplicateTabs(newTabId, newTabUrl) {
             !tab.pinned
         );
         
-        // Close all duplicate tabs instantly
         if (duplicateTabs.length > 0) {
-            console.log(`Found ${duplicateTabs.length} duplicate tabs, closing them instantly`);
+            console.log(`Found ${duplicateTabs.length} duplicate tabs, applying strategy: ${settings.duplicateStrategy}`);
             
-            // Close all duplicate tabs simultaneously
-            const closePromises = duplicateTabs.map(tab => chrome.tabs.remove(tab.id));
-            await Promise.all(closePromises);
+            // Get current active tab
+            const currentTab = await chrome.tabs.query({ active: true, currentWindow: true });
+            const currentTabId = currentTab[0]?.id;
             
-            console.log('All duplicate tabs closed successfully');
+            // Apply the selected strategy
+            switch (settings.duplicateStrategy) {
+                case 'closeNewStayCurrent':
+                    // Close new tab, stay on current tab
+                    await chrome.tabs.remove(newTabId);
+                    console.log('New duplicate tab closed, staying on current tab');
+                    break;
+                    
+                case 'closeNewGoToOriginal':
+                    // Close new tab, navigate to original tab
+                    await chrome.tabs.remove(newTabId);
+                    if (duplicateTabs.length > 0) {
+                        await chrome.tabs.update(duplicateTabs[0].id, { active: true });
+                        console.log('New duplicate tab closed, navigated to original tab');
+                    }
+                    break;
+                    
+                case 'closeExistingStayCurrent':
+                    // Close existing tabs, stay on current tab
+                    const closePromises = duplicateTabs.map(tab => chrome.tabs.remove(tab.id));
+                    await Promise.all(closePromises);
+                    console.log('Existing duplicate tabs closed, staying on current tab');
+                    break;
+                    
+                case 'closeExistingGoToNew':
+                    // Close existing tabs, navigate to new tab
+                    const closeExistingPromises = duplicateTabs.map(tab => chrome.tabs.remove(tab.id));
+                    await Promise.all(closeExistingPromises);
+                    await chrome.tabs.update(newTabId, { active: true });
+                    console.log('Existing duplicate tabs closed, navigated to new tab');
+                    break;
+                    
+                default:
+                    // Default: close new tab, stay on current
+                    await chrome.tabs.remove(newTabId);
+                    console.log('Default strategy: new duplicate tab closed');
+                    break;
+            }
         }
         
         return duplicateTabs.length;
@@ -61,13 +97,13 @@ export async function removeAllDuplicateTabs() {
             }
         });
         
-        // Find and close duplicate tabs
+        // Find and close duplicate tabs based on strategy
         let totalClosed = 0;
         const closePromises = [];
         
         Object.values(urlGroups).forEach(tabs => {
             if (tabs.length > 1) {
-                // Keep the first tab, close the rest
+                // Apply strategy: keep the first tab, close the rest
                 const tabsToClose = tabs.slice(1);
                 totalClosed += tabsToClose.length;
                 
@@ -80,7 +116,7 @@ export async function removeAllDuplicateTabs() {
         // Close all duplicate tabs simultaneously
         if (closePromises.length > 0) {
             await Promise.all(closePromises);
-            console.log(`Closed ${totalClosed} duplicate tabs`);
+            console.log(`Closed ${totalClosed} duplicate tabs using strategy: ${settings.duplicateStrategy}`);
         }
         
         return totalClosed;

@@ -1,11 +1,12 @@
 // Options page script for Prevent Duplicate Tabs extension
 
-import { getExtensionSettings, setExtensionEnabled, initializeDefaultSettings } from '../src/functions/utils/storageUtils.mjs';
+import { getExtensionSettings, setExtensionEnabled, setDuplicateStrategy, initializeDefaultSettings } from '../src/functions/utils/storageUtils.mjs';
 
 console.log('Prevent Duplicate Tabs extension options page loaded');
 
 // DOM elements
 const extensionEnabledCheckbox = document.getElementById('extensionEnabled');
+const duplicateStrategyRadios = document.querySelectorAll('input[name="duplicateStrategy"]');
 const resetSettingsButton = document.getElementById('resetSettings');
 const statusMessage = document.getElementById('statusMessage');
 const loadingOverlay = document.getElementById('loadingOverlay');
@@ -26,6 +27,13 @@ async function initializeOptions() {
         
         // Update UI with current settings
         extensionEnabledCheckbox.checked = settings.extensionEnabled;
+        
+        // Set the correct radio button
+        duplicateStrategyRadios.forEach(radio => {
+            if (radio.value === settings.duplicateStrategy) {
+                radio.checked = true;
+            }
+        });
         
         // Hide loading overlay and show options form
         loadingOverlay.style.display = 'none';
@@ -72,6 +80,22 @@ extensionEnabledCheckbox.addEventListener('change', async (event) => {
     }
 });
 
+// Handle duplicate strategy change
+duplicateStrategyRadios.forEach(radio => {
+    radio.addEventListener('change', async (event) => {
+        try {
+            const strategy = event.target.value;
+            await setDuplicateStrategy(strategy);
+            showStatus('Duplicate handling strategy updated', 'success');
+        } catch (error) {
+            console.error('Error updating duplicate strategy setting:', error);
+            showStatus('Error updating strategy', 'error');
+            // Revert the radio button
+            event.target.checked = false;
+        }
+    });
+});
+
 
 
 
@@ -89,6 +113,13 @@ resetSettingsButton.addEventListener('click', async () => {
         // Reload current settings
         const settings = await getExtensionSettings();
         extensionEnabledCheckbox.checked = settings.extensionEnabled;
+        
+        // Reset radio buttons
+        duplicateStrategyRadios.forEach(radio => {
+            if (radio.value === settings.duplicateStrategy) {
+                radio.checked = true;
+            }
+        });
         
         showStatus('Settings reset to defaults', 'success');
     } catch (error) {

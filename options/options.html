@@ -33,6 +33,50 @@
                         </div>
                     </div>
                     
+                    <div class="option-group strategy-group">
+                        <div class="option-label">
+                            <h3>Duplicate Handling Strategy</h3>
+                            <p>Choose how the extension handles duplicate tabs when they are detected.</p>
+                        </div>
+                        <div class="radio-options">
+                            <label class="radio-option">
+                                <input type="radio" name="duplicateStrategy" value="closeNewStayCurrent" checked>
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Close new tab, stay on current tab</strong>
+                                    <span>Closes the duplicate tab and keeps you where you are</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-option">
+                                <input type="radio" name="duplicateStrategy" value="closeNewGoToOriginal">
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Close new tab, navigate to original tab</strong>
+                                    <span>Closes the duplicate and takes you to the original</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-option">
+                                <input type="radio" name="duplicateStrategy" value="closeExistingStayCurrent">
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Close existing tab, stay on current tab</strong>
+                                    <span>Closes existing duplicates and keeps you where you are</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-option">
+                                <input type="radio" name="duplicateStrategy" value="closeExistingGoToNew">
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Close existing tab, navigate to new tab</strong>
+                                    <span>Closes existing duplicates and takes you to the new tab</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
                     <div class="action-buttons">
                         <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
                     </div>
