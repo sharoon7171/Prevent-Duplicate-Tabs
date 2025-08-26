@@ -1,12 +1,13 @@
 // Options page script for Prevent Duplicate Tabs extension
 
-import { getExtensionSettings, setExtensionEnabled, setDuplicateStrategy, initializeDefaultSettings } from '../src/functions/utils/storageUtils.mjs';
+import { getExtensionSettings, setExtensionEnabled, setDuplicateStrategy, setUrlSensitivity, initializeDefaultSettings } from '../src/functions/utils/storageUtils.mjs';
 
 console.log('Prevent Duplicate Tabs extension options page loaded');
 
 // DOM elements
 const extensionEnabledCheckbox = document.getElementById('extensionEnabled');
 const duplicateStrategyRadios = document.querySelectorAll('input[name="duplicateStrategy"]');
+const urlSensitivityRadios = document.querySelectorAll('input[name="urlSensitivity"]');
 const resetSettingsButton = document.getElementById('resetSettings');
 const statusMessage = document.getElementById('statusMessage');
 const loadingOverlay = document.getElementById('loadingOverlay');
@@ -28,9 +29,16 @@ async function initializeOptions() {
         // Update UI with current settings
         extensionEnabledCheckbox.checked = settings.extensionEnabled;
         
-        // Set the correct radio button
+        // Set the correct radio button for duplicate strategy
         duplicateStrategyRadios.forEach(radio => {
             if (radio.value === settings.duplicateStrategy) {
+                radio.checked = true;
+            }
+        });
+        
+        // Set the correct radio button for URL sensitivity
+        urlSensitivityRadios.forEach(radio => {
+            if (radio.value === settings.urlSensitivity) {
                 radio.checked = true;
             }
         });
@@ -61,17 +69,12 @@ function showStatus(message, type = 'info') {
     }, 3000);
 }
 
-// Handle extension enabled toggle
+// Handle extension enabled/disabled toggle
 extensionEnabledCheckbox.addEventListener('change', async (event) => {
     try {
         const enabled = event.target.checked;
         await setExtensionEnabled(enabled);
-        
-        if (enabled) {
-            showStatus('Extension enabled successfully', 'success');
-        } else {
-            showStatus('Extension disabled', 'info');
-        }
+        showStatus(`Extension ${enabled ? 'enabled' : 'disabled'}`, 'success');
     } catch (error) {
         console.error('Error updating extension enabled setting:', error);
         showStatus('Error updating setting', 'error');
@@ -96,8 +99,21 @@ duplicateStrategyRadios.forEach(radio => {
     });
 });
 
-
-
+// Handle URL sensitivity change
+urlSensitivityRadios.forEach(radio => {
+    radio.addEventListener('change', async (event) => {
+        try {
+            const sensitivity = event.target.value;
+            await setUrlSensitivity(sensitivity);
+            showStatus('URL sensitivity updated', 'success');
+        } catch (error) {
+            console.error('Error updating URL sensitivity setting:', error);
+            showStatus('Error updating sensitivity', 'error');
+            // Revert the radio button
+            event.target.checked = false;
+        }
+    });
+});
 
 
 // Handle reset settings button
@@ -117,6 +133,13 @@ resetSettingsButton.addEventListener('click', async () => {
         // Reset radio buttons
         duplicateStrategyRadios.forEach(radio => {
             if (radio.value === settings.duplicateStrategy) {
+                radio.checked = true;
+            }
+        });
+        
+        // Reset URL sensitivity radio buttons
+        urlSensitivityRadios.forEach(radio => {
+            if (radio.value === settings.urlSensitivity) {
                 radio.checked = true;
             }
         });

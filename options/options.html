@@ -82,6 +82,41 @@
                         </div>
                     </div>
                     
+                    <div class="option-group sensitivity-group">
+                        <div class="option-label">
+                            <h3>URL Sensitivity</h3>
+                            <p>Choose how strictly the extension detects duplicate tabs based on URL matching.</p>
+                        </div>
+                        <div class="radio-options">
+                            <label class="radio-option">
+                                <input type="radio" name="urlSensitivity" value="exactUrl" checked>
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Exact same URL</strong>
+                                    <span>Only exact URL matches are considered duplicates (most strict)</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-option">
+                                <input type="radio" name="urlSensitivity" value="ignoreParameters">
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Ignore parameters</strong>
+                                    <span>Ignores query strings and fragments, but keeps path</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-option">
+                                <input type="radio" name="urlSensitivity" value="exactDomain">
+                                <span class="radio-custom"></span>
+                                <div class="radio-text">
+                                    <strong>Exact domain</strong>
+                                    <span>Only domain matters, ignores path, parameters, and fragments (least strict)</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
                     <div class="action-buttons">
                         <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
                     </div>

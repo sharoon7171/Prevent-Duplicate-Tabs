@@ -11,12 +11,20 @@ export const DUPLICATE_STRATEGIES = {
     CLOSE_EXISTING_GO_TO_NEW: 'closeExistingGoToNew'
 };
 
+export const URL_SENSITIVITY_OPTIONS = {
+    EXACT_URL: 'exactUrl',
+    IGNORE_PARAMETERS: 'ignoreParameters',
+    EXACT_DOMAIN: 'exactDomain'
+};
+
 export const STORAGE_KEYS = {
     EXTENSION_ENABLED: 'extensionEnabled',
-    DUPLICATE_STRATEGY: 'duplicateStrategy'
+    DUPLICATE_STRATEGY: 'duplicateStrategy',
+    URL_SENSITIVITY: 'urlSensitivity'
 };
 
 export const DEFAULT_SETTINGS = {
     extensionEnabled: true,
-    duplicateStrategy: 'closeNewStayCurrent'
+    duplicateStrategy: 'closeNewStayCurrent',
+    urlSensitivity: 'exactUrl'
 };

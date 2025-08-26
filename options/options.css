@@ -138,6 +138,29 @@ main {
     color: #7f8c8d;
 }
 
+/* Sensitivity Group - Same styling as strategy group */
+.sensitivity-group {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 2rem;
+}
+
+.sensitivity-group .option-label {
+    margin-left: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.sensitivity-group .option-label h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sensitivity-group .option-label p {
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
 /* Radio Options - Professional Layout */
 .radio-options {
     display: grid;
