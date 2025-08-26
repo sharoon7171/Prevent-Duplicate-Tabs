@@ -6,7 +6,6 @@ console.log('Prevent Duplicate Tabs extension options page loaded');
 
 // DOM elements
 const extensionEnabledCheckbox = document.getElementById('extensionEnabled');
-const removeDuplicatesButton = document.getElementById('removeDuplicates');
 const resetSettingsButton = document.getElementById('resetSettings');
 const statusMessage = document.getElementById('statusMessage');
 const loadingOverlay = document.getElementById('loadingOverlay');
@@ -75,28 +74,7 @@ extensionEnabledCheckbox.addEventListener('change', async (event) => {
 
 
 
-// Handle remove duplicates button
-removeDuplicatesButton.addEventListener('click', async () => {
-    try {
-        removeDuplicatesButton.disabled = true;
-        removeDuplicatesButton.textContent = 'Removing...';
-        
-        // Send message to background script to remove duplicates
-        const response = await chrome.runtime.sendMessage({ action: 'removeDuplicates' });
-        
-        if (response && response.success) {
-            showStatus(`Removed ${response.count} duplicate tabs`, 'success');
-        } else {
-            showStatus('No duplicate tabs found', 'info');
-        }
-    } catch (error) {
-        console.error('Error removing duplicates:', error);
-        showStatus('Error removing duplicates', 'error');
-    } finally {
-        removeDuplicatesButton.disabled = false;
-        removeDuplicatesButton.textContent = 'Remove Existing Duplicates';
-    }
-});
+
 
 // Handle reset settings button
 resetSettingsButton.addEventListener('click', async () => {

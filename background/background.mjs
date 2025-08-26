@@ -65,18 +65,8 @@ chrome.storage.onChanged.addListener(async (changes, namespace) => {
     }
 });
 
-// Listen for messages from options page
+// Listen for messages from options page (currently no actions needed)
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log('Message received:', message);
-    
-    if (message.action === 'removeDuplicates') {
-        try {
-            const count = await removeAllDuplicateTabs();
-            sendResponse({ success: true, count: count });
-        } catch (error) {
-            console.error('Error removing duplicates:', error);
-            sendResponse({ success: false, error: error.message });
-        }
-        return true; // Keep message channel open for async response
-    }
+    // No actions currently needed from options page
 });

@@ -133,6 +133,11 @@ input:checked + .slider:before {
     justify-content: center;
 }
 
+/* Single button centering */
+.action-buttons:has(button:only-child) {
+    justify-content: center;
+}
+
 .btn {
     padding: 12px 24px;
     border: none;
