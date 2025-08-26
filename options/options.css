@@ -14,18 +14,18 @@ body {
 }
 
 .options-container {
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
     background-color: white;
-    min-height: 100vh;
+    min-height: auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 header {
     text-align: center;
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
     border-bottom: 2px solid #e0e0e0;
 }
 
@@ -52,7 +52,7 @@ header {
 }
 
 .header-text h1 {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
     color: #2c3e50;
     margin: 0;
     text-align: left;
@@ -60,7 +60,7 @@ header {
 }
 
 .header-text p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #7f8c8d;
     margin: 0;
     text-align: left;
@@ -69,8 +69,8 @@ header {
 
 
 main {
-    min-height: 400px;
-    padding: 2rem 0;
+    min-height: auto;
+    padding: 1rem 0;
 }
 
 .options-form {
@@ -81,10 +81,10 @@ main {
 .option-group {
     display: flex;
     align-items: center;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
     background-color: #f8f9fa;
-    border-radius: 12px;
+    border-radius: 8px;
     border: 1px solid #e9ecef;
 }
 
@@ -94,16 +94,16 @@ main {
 }
 
 .option-label h3 {
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
     color: #2c3e50;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
 }
 
 .option-label p {
     margin: 0;
     color: #6c757d;
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    line-height: 1.3;
 }
 
 /* Toggle Switch Styles */
@@ -119,18 +119,18 @@ main {
 .strategy-group {
     flex-direction: column;
     align-items: stretch;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .strategy-group .option-label {
     margin-left: 0;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: center;
 }
 
 .strategy-group .option-label h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .strategy-group .option-label p {
@@ -142,18 +142,18 @@ main {
 .sensitivity-group {
     flex-direction: column;
     align-items: stretch;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .sensitivity-group .option-label {
     margin-left: 0;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: center;
 }
 
 .sensitivity-group .option-label h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .sensitivity-group .option-label p {
@@ -172,15 +172,15 @@ main {
 .radio-option {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1.25rem;
+    gap: 0.5rem;
+    padding: 0.75rem;
     border: 2px solid #e9ecef;
-    border-radius: 12px;
+    border-radius: 8px;
     background-color: white;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    min-height: 80px;
+    min-height: 60px;
 }
 
 .radio-option:hover {
@@ -312,7 +312,7 @@ input:checked + .slider:before {
 .action-buttons {
     display: flex;
     gap: 1rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
     justify-content: center;
 }
 
@@ -322,14 +322,14 @@ input:checked + .slider:before {
 }
 
 .btn {
-    padding: 12px 24px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 120px;
+    min-width: 100px;
 }
 
 .btn-primary {
@@ -355,7 +355,7 @@ input:checked + .slider:before {
 /* Toast Notification System */
 .toast-container {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
     z-index: 10000;
     display: flex;
@@ -459,7 +459,7 @@ input:checked + .slider:before {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .toast-container {
-        top: 10px;
+        bottom: 10px;
         right: 10px;
         left: 10px;
         max-width: none;
@@ -473,7 +473,7 @@ input:checked + .slider:before {
 
 @media (max-width: 480px) {
     .toast-container {
-        top: 5px;
+        bottom: 5px;
         right: 5px;
         left: 5px;
     }
@@ -485,8 +485,8 @@ input:checked + .slider:before {
 }
 
 footer {
-    margin-top: 3rem;
-    padding-top: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
     border-top: 2px solid #e0e0e0;
 }
 
@@ -494,7 +494,7 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     text-align: center;
 }
 
@@ -563,7 +563,7 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
+    padding: 2rem;
     text-align: center;
 }
 
