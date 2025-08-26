@@ -9,10 +9,16 @@ const extensionEnabledCheckbox = document.getElementById('extensionEnabled');
 const removeDuplicatesButton = document.getElementById('removeDuplicates');
 const resetSettingsButton = document.getElementById('resetSettings');
 const statusMessage = document.getElementById('statusMessage');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const optionsForm = document.getElementById('optionsForm');
 
 // Initialize the options page
 async function initializeOptions() {
     try {
+        // Show loading overlay
+        loadingOverlay.style.display = 'flex';
+        optionsForm.style.display = 'none';
+        
         // Initialize default settings if needed
         await initializeDefaultSettings();
         
@@ -22,10 +28,18 @@ async function initializeOptions() {
         // Update UI with current settings
         extensionEnabledCheckbox.checked = settings.extensionEnabled;
         
+        // Hide loading overlay and show options form
+        loadingOverlay.style.display = 'none';
+        optionsForm.style.display = 'block';
+        
         console.log('Options page initialized with settings:', settings);
     } catch (error) {
         console.error('Error initializing options:', error);
         showStatus('Error loading settings', 'error');
+        
+        // Hide loading overlay and show options form even on error
+        loadingOverlay.style.display = 'none';
+        optionsForm.style.display = 'block';
     }
 }
 
@@ -97,7 +111,6 @@ resetSettingsButton.addEventListener('click', async () => {
         // Reload current settings
         const settings = await getExtensionSettings();
         extensionEnabledCheckbox.checked = settings.extensionEnabled;
-        duplicatePreventionCheckbox.checked = settings.duplicatePrevention;
         
         showStatus('Settings reset to defaults', 'success');
     } catch (error) {

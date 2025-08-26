@@ -14,9 +14,15 @@
         </header>
         <main>
             <div class="options-form">
-                <div class="option-group">
+                <!-- Loading overlay -->
+                <div id="loadingOverlay" class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <p>Loading settings...</p>
+                </div>
+                
+                <div class="option-group" id="optionsForm" style="display: none;">
                     <label class="toggle-switch">
-                        <input type="checkbox" id="extensionEnabled" checked>
+                        <input type="checkbox" id="extensionEnabled">
                         <span class="slider"></span>
                     </label>
                     <div class="option-label">
