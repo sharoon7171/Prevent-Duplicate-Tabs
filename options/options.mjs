@@ -119,9 +119,8 @@ async function initializeOptions() {
                 }
             },
             options: [
-                { value: 'exactUrl', label: 'Exact same URL', description: 'Only exact URL matches are considered duplicates' },
-                { value: 'ignoreParameters', label: 'Ignore parameters', description: 'Ignores query parameters and fragments' },
-                { value: 'exactDomain', label: 'Complete domain', description: 'Any page on the same domain is considered duplicate' }
+                { value: 'exactUrl', label: 'Exact URL with Parameters', description: 'Exact same URL including parameters - only identical URLs are considered duplicates' },
+                { value: 'exactUrlIgnoreParams', label: 'Exact URL Ignore Parameters', description: 'Same URL but ignores parameters - URLs with same path are considered duplicates' }
             ]
         });
         
@@ -142,7 +141,13 @@ async function initializeOptions() {
                     strategyRadios.setSelectedValue(resetSettings.duplicateStrategy);
                     sensitivityRadios.setSelectedValue(resetSettings.urlSensitivity);
                     
-                    console.log('Settings reset to default values');
+                    // Refresh whitelist manager to show cleared entries
+                    if (window.whitelistManager && typeof window.whitelistManager.refresh === 'function') {
+                        console.log('Options: Refreshing whitelist manager after reset...');
+                        await window.whitelistManager.refresh();
+                    }
+                    
+                    console.log('Settings and whitelist reset to default values');
                 } catch (error) {
                     console.error('Error resetting settings:', error);
                 } finally {

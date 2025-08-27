@@ -18,10 +18,13 @@ export async function resetAllSettings() {
         // Set each setting individually to trigger storage events
         await chrome.storage.sync.set(resetSettings);
         
+        // Also reset whitelist entries (clear all)
+        await resetWhitelist();
+        
         // Get the reset settings
         const settings = await getExtensionSettings();
         
-        console.log('All settings reset to default values');
+        console.log('All settings and whitelist reset to default values');
         return settings;
     } catch (error) {
         console.error('Error resetting settings:', error);

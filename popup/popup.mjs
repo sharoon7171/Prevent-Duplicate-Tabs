@@ -182,15 +182,11 @@ async function initializePopup() {
             options: [
                 {
                     value: 'exactUrl',
-                    label: 'Exact same URL'
+                    label: 'Exact URL with Parameters'
                 },
                 {
-                    value: 'ignoreParameters',
-                    label: 'Ignore parameters'
-                },
-                {
-                    value: 'exactDomain',
-                    label: 'Complete domain'
+                    value: 'exactUrlIgnoreParams',
+                    label: 'Exact URL Ignore Parameters'
                 }
             ]
         });
@@ -213,7 +209,13 @@ async function initializePopup() {
                     finalStrategyRadios.setSelectedValue(resetSettings.duplicateStrategy);
                     finalSensitivityRadios.setSelectedValue(resetSettings.urlSensitivity);
                     
-                    console.log('Settings reset to default values');
+                    // Refresh whitelist component to show cleared entries
+                    if (popupWhitelist && typeof popupWhitelist.refresh === 'function') {
+                        console.log('Popup: Refreshing whitelist component after reset...');
+                        await popupWhitelist.refresh();
+                    }
+                    
+                    console.log('Settings and whitelist reset to default values');
                 } catch (error) {
                     console.error('Error resetting settings:', error);
                 } finally {

@@ -1,16 +1,11 @@
 // Popup-specific whitelist component for current tab
 import { 
-    getWhitelistEntries, 
+    getWhitelistEntries,
     addWhitelistEntry, 
-    updateWhitelistEntry,
     removeWhitelistEntry,
-    isUrlWhitelisted 
+    isUrlWhitelisted,
+    normalizeUrl
 } from '../../functions/utils/whitelistUtils.mjs';
-import { 
-    WHITELIST_TYPES, 
-    WHITELIST_TYPE_LABELS, 
-    WHITELIST_TYPE_DESCRIPTIONS 
-} from '../../constants/config/whitelistConfig.mjs';
 
 export class PopupWhitelist {
     constructor(containerId) {
@@ -18,7 +13,7 @@ export class PopupWhitelist {
         this.currentUrl = '';
         this.currentTabId = null;
         this.whitelistEntry = null;
-        this.isEditing = false;
+        this.whitelistEnabled = false;
         
         if (!this.container) {
             console.error('PopupWhitelist: Container not found:', containerId);
@@ -71,6 +66,7 @@ export class PopupWhitelist {
             
             // Check if URL is already whitelisted
             const isWhitelisted = await isUrlWhitelisted(this.currentUrl);
+            this.whitelistEnabled = isWhitelisted;
             
             if (isWhitelisted) {
                 // Find the existing whitelist entry
@@ -88,38 +84,14 @@ export class PopupWhitelist {
     
     matchesWhitelistEntry(url, entry) {
         try {
-            switch (entry.type) {
-                case WHITELIST_TYPES.EXACT_URL:
-                    return this.normalizeUrl(url) === this.normalizeUrl(entry.url);
-                    
-                case WHITELIST_TYPES.IGNORE_PARAMETERS:
-                    return this.normalizeUrl(url) === this.normalizeUrl(entry.url);
-                    
-                case WHITELIST_TYPES.COMPLETE_DOMAIN:
-                    const urlHostname = this.extractHostname(url);
-                    const entryHostname = this.extractHostname(entry.url);
-                    return urlHostname === entryHostname;
-                    
-                default:
-                    return false;
-            }
+            // All entries are now domain-only whitelists
+            // Complete domain match (ignores path, parameters, and fragments)
+            const urlHostname = this.extractHostname(url);
+            const entryHostname = this.extractHostname(entry.url);
+            return urlHostname === entryHostname;
         } catch (error) {
             console.error('Error matching whitelist entry:', error);
             return false;
-        }
-    }
-    
-    normalizeUrl(url) {
-        try {
-            const urlObj = new URL(url);
-            const hostname = urlObj.hostname.replace(/^www\./, '');
-            const path = urlObj.pathname.replace(/\/$/, '');
-            return hostname + path;
-        } catch (error) {
-            const cleanUrl = url.replace(/^https?:\/\//, '');
-            const withoutWww = cleanUrl.replace(/^www\./, '');
-            const normalized = withoutWww.split('?')[0].split('#')[0].replace(/\/$/, '');
-            return normalized;
         }
     }
     
@@ -140,231 +112,65 @@ export class PopupWhitelist {
             return;
         }
         
-        const domain = this.extractHostname(this.currentUrl);
-        const isCurrentlyWhitelisted = !!this.whitelistEntry;
+        const normalizedDomain = normalizeUrl(this.currentUrl);
         
         this.container.innerHTML = `
-            <div class="whitelist-section">
-                <div class="section-header">
-                    <h3>Current Tab Whitelist</h3>
-                    <p>Manage whitelist rule for the current tab</p>
+            <div class="whitelist-unified">
+                <label class="toggle-label">
+                    <input type="checkbox" id="whitelistToggle" ${this.whitelistEnabled ? 'checked' : ''}>
+                    <span class="toggle-text">Enable Whitelist for this domain</span>
+                </label>
+                <div class="toggle-description">
+                    ${this.whitelistEnabled ? 'Duplicate prevention disabled for this domain' : 'Duplicate prevention enabled for this domain'}
                 </div>
-                
-                <div class="current-url-info">
-                    <div class="url-display">
-                        <strong>Current URL:</strong>
-                        <span class="url-text">${this.truncateUrl(this.currentUrl, 60)}</span>
-                    </div>
-                    <div class="domain-info">
-                        <strong>Domain:</strong> ${domain}
-                    </div>
+                <div class="domain-display">
+                    <strong>Domain:</strong> ${normalizedDomain}
                 </div>
-                
-                ${isCurrentlyWhitelisted ? (this.isEditing ? this.renderEditForm() : this.renderWhitelistedState()) : this.renderWhitelistForm()}
             </div>
         `;
         
         this.bindEvents();
-    }
-    
-    renderWhitelistForm() {
-        return `
-            <div class="whitelist-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="whitelistType">URL Sensitivity</label>
-                        <select id="whitelistType">
-                            <option value="${WHITELIST_TYPES.EXACT_URL}">${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.EXACT_URL]}</option>
-                            <option value="${WHITELIST_TYPES.IGNORE_PARAMETERS}">${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.IGNORE_PARAMETERS]}</option>
-                            <option value="${WHITELIST_TYPES.COMPLETE_DOMAIN}">${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.COMPLETE_DOMAIN]}</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="info-label">Type Information</label>
-                        <div id="whitelistTypeInfo" class="type-info">
-                            ${WHITELIST_TYPE_DESCRIPTIONS[WHITELIST_TYPES.EXACT_URL]}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" id="addWhitelistBtn" class="btn btn-primary">Add to Whitelist</button>
-                </div>
-            </div>
-        `;
-    }
-    
-    renderWhitelistedState() {
-        const typeLabel = WHITELIST_TYPE_LABELS[this.whitelistEntry.type];
-        const addedDate = new Date(this.whitelistEntry.createdAt).toLocaleDateString();
-        
-        return `
-            <div class="whitelist-status">
-                <div class="status-info">
-                    <div class="status-badge whitelisted">✓ Whitelisted</div>
-                    <div class="entry-details">
-                        <div><strong>Type:</strong> ${typeLabel}</div>
-                        <div><strong>Added:</strong> ${addedDate}</div>
-                    </div>
-                </div>
-                
-                <div class="status-actions">
-                    <button type="button" id="editWhitelistBtn" class="btn btn-secondary btn-small">Edit</button>
-                    <button type="button" id="removeWhitelistBtn" class="btn btn-danger btn-small">Remove</button>
-                </div>
-            </div>
-        `;
-    }
-
-    renderEditForm() {
-        return `
-            <div class="whitelist-edit-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="editWhitelistType">URL Sensitivity</label>
-                        <select id="editWhitelistType">
-                            <option value="${WHITELIST_TYPES.EXACT_URL}" ${this.whitelistEntry.type === WHITELIST_TYPES.EXACT_URL ? 'selected' : ''}>${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.EXACT_URL]}</option>
-                            <option value="${WHITELIST_TYPES.IGNORE_PARAMETERS}" ${this.whitelistEntry.type === WHITELIST_TYPES.IGNORE_PARAMETERS ? 'selected' : ''}>${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.IGNORE_PARAMETERS]}</option>
-                            <option value="${WHITELIST_TYPES.COMPLETE_DOMAIN}" ${this.whitelistEntry.type === WHITELIST_TYPES.COMPLETE_DOMAIN ? 'selected' : ''}>${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.COMPLETE_DOMAIN]}</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="info-label">Type Information</label>
-                        <div id="editWhitelistTypeInfo" class="type-info">
-                            ${WHITELIST_TYPE_DESCRIPTIONS[this.whitelistEntry.type]}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" id="updateWhitelistBtn" class="btn btn-primary btn-small">Update</button>
-                    <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-small">Cancel</button>
-                </div>
-            </div>
-        `;
-    }
-    
-    truncateUrl(url, maxLength) {
-        if (url.length <= maxLength) return url;
-        return url.substring(0, maxLength - 3) + '...';
     }
     
     bindEvents() {
-        // Type change handler
-        const typeSelect = document.getElementById('whitelistType');
-        if (typeSelect) {
-            typeSelect.addEventListener('change', () => this.updateTypeInfo());
-        }
-        
-        // Edit type change handler
-        const editTypeSelect = document.getElementById('editWhitelistType');
-        if (editTypeSelect) {
-            editTypeSelect.addEventListener('change', () => this.updateEditTypeInfo());
-        }
-        
-        // Add whitelist button
-        const addBtn = document.getElementById('addWhitelistBtn');
-        if (addBtn) {
-            addBtn.addEventListener('click', () => this.handleAdd());
-        }
-        
-        // Edit whitelist button
-        const editBtn = document.getElementById('editWhitelistBtn');
-        if (editBtn) {
-            editBtn.addEventListener('click', () => this.handleEdit());
-        }
-        
-        // Update whitelist button
-        const updateBtn = document.getElementById('updateWhitelistBtn');
-        if (updateBtn) {
-            updateBtn.addEventListener('click', () => this.handleUpdate());
-        }
-        
-        // Cancel edit button
-        const cancelBtn = document.getElementById('cancelEditBtn');
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', () => this.handleCancelEdit());
-        }
-        
-        // Remove whitelist button
-        const removeBtn = document.getElementById('removeWhitelistBtn');
-        if (removeBtn) {
-            removeBtn.addEventListener('click', () => this.handleRemove());
+        // Whitelist toggle
+        const whitelistToggle = document.getElementById('whitelistToggle');
+        if (whitelistToggle) {
+            whitelistToggle.addEventListener('change', (e) => this.handleToggleChange(e.target.checked));
         }
     }
     
-    updateTypeInfo() {
-        const typeSelect = document.getElementById('whitelistType');
-        const typeInfo = document.getElementById('whitelistTypeInfo');
-        
-        if (typeSelect && typeInfo) {
-            const selectedType = typeSelect.value;
-            typeInfo.textContent = WHITELIST_TYPE_DESCRIPTIONS[selectedType];
-        }
-    }
-
-    updateEditTypeInfo() {
-        const typeSelect = document.getElementById('editWhitelistType');
-        const typeInfo = document.getElementById('editWhitelistTypeInfo');
-        
-        if (typeSelect && typeInfo) {
-            const selectedType = typeSelect.value;
-            typeInfo.textContent = WHITELIST_TYPE_DESCRIPTIONS[selectedType];
-        }
-    }
-
-    handleEdit() {
-        this.isEditing = true;
-        this.render();
-        this.bindEvents();
-    }
-
-    handleCancelEdit() {
-        this.isEditing = false;
-        this.render();
-        this.bindEvents();
-    }
-
-    async handleUpdate() {
+    async handleToggleChange(enabled) {
         try {
-            const type = document.getElementById('editWhitelistType').value;
+            this.whitelistEnabled = enabled;
             
-            // Update whitelist entry
-            await updateWhitelistEntry(this.whitelistEntry.id, {
-                url: this.currentUrl,
-                type: type
-            });
+            if (enabled) {
+                // Add to whitelist
+                await this.handleAdd();
+            } else {
+                // Remove from whitelist
+                if (this.whitelistEntry) {
+                    await this.handleRemove();
+                }
+            }
             
-            // Update local entry
-            this.whitelistEntry.type = type;
-            this.whitelistEntry.updatedAt = Date.now();
-            
-            // Exit edit mode and refresh
-            this.isEditing = false;
+            // Update the UI
             this.render();
             this.bindEvents();
-            
-            this.showSuccess('Whitelist entry updated successfully');
         } catch (error) {
-            console.error('Error updating whitelist entry:', error);
-            this.showError(error.message);
+            console.error('Error toggling whitelist:', error);
+            // Revert the toggle if there was an error
+            this.whitelistEnabled = !enabled;
+            this.render();
+            this.bindEvents();
         }
     }
     
     async handleAdd() {
         try {
-            const type = document.getElementById('whitelistType').value;
-            
             // Add to whitelist
             await addWhitelistEntry({
-                url: this.currentUrl,
-                type: type
+                url: this.currentUrl
             });
             
             // Update status

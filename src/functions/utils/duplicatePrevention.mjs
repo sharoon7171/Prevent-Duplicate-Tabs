@@ -24,28 +24,51 @@ function normalizeUrl(url) {
     }
 }
 
+// Helper function to extract domain only (no subdomains)
+function extractDomainOnly(url) {
+    try {
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname.replace(/^www\./, '');
+        // Split by dots and take last two parts for main domain
+        const parts = hostname.split('.');
+        if (parts.length >= 2) {
+            return parts.slice(-2).join('.');
+        }
+        return hostname;
+    } catch (error) {
+        // If it's not a valid URL, try to extract domain
+        const cleanUrl = url.replace(/^https?:\/\//, '');
+        const withoutWww = cleanUrl.replace(/^www\./, '');
+        const hostname = withoutWww.split('/')[0].split('?')[0].split('#')[0];
+        const parts = hostname.split('.');
+        if (parts.length >= 2) {
+            return parts.slice(-2).join('.');
+        }
+        return hostname;
+    }
+}
+
 // Helper function to compare URLs based on sensitivity setting
 function compareUrls(url1, url2, sensitivity) {
     try {
         switch (sensitivity) {
             case 'exactUrl':
-                // Use normalizeUrl for consistent comparison
-                const normalizedUrl1 = normalizeUrl(url1);
-                const normalizedUrl2 = normalizeUrl(url2);
-                return normalizedUrl1 === normalizedUrl2;
+                // Exact URL match including parameters and fragments
+                return url1 === url2;
                 
-            case 'ignoreParameters':
-                // Use normalizeUrl for consistent comparison
-                const normalizedUrl1Ignore = normalizeUrl(url1);
-                const normalizedUrl2Ignore = normalizeUrl(url2);
-                return normalizedUrl1Ignore === normalizedUrl2Ignore;
-                
-            case 'exactDomain':
-                // Only compare domain, ignore path, parameters, and fragments
-                const url1Obj = new URL(url1);
-                const url2Obj = new URL(url2);
-                // Remove www for consistent comparison
-                return url1Obj.hostname.replace(/^www\./, '') === url2Obj.hostname.replace(/^www\./, '');
+            case 'exactUrlIgnoreParams':
+                // Same URL but ignores parameters and fragments
+                try {
+                    const url1Obj = new URL(url1);
+                    const url2Obj = new URL(url2);
+                    const hostname1 = url1Obj.hostname.replace(/^www\./, '');
+                    const hostname2 = url2Obj.hostname.replace(/^www\./, '');
+                    const path1 = url1Obj.pathname.replace(/\/$/, '');
+                    const path2 = url2Obj.pathname.replace(/\/$/, '');
+                    return hostname1 === hostname2 && path1 === path2;
+                } catch (error) {
+                    return false;
+                }
                 
             default:
                 return url1 === url2;
@@ -164,16 +187,15 @@ export async function removeAllDuplicateTabs() {
                 
                 switch (settings.urlSensitivity) {
                     case 'exactUrl':
-                        groupKey = normalizeUrl(tab.url);
+                        groupKey = tab.url; // Use full URL for exact matching
                         break;
-                    case 'ignoreParameters':
-                        groupKey = normalizeUrl(tab.url);
-                        break;
-                    case 'exactDomain':
+                    case 'exactUrlIgnoreParams':
+                        // Use domain + path for matching (ignores parameters)
                         try {
                             const urlObj = new URL(tab.url);
-                            // Remove www for consistent grouping
-                            groupKey = urlObj.hostname.replace(/^www\./, '');
+                            const hostname = urlObj.hostname.replace(/^www\./, '');
+                            const path = urlObj.pathname.replace(/\/$/, '');
+                            groupKey = `${hostname}${path}`;
                         } catch (error) {
                             groupKey = tab.url;
                         }
@@ -209,7 +231,6 @@ export async function removeAllDuplicateTabs() {
         if (closePromises.length > 0) {
             await Promise.all(closePromises);
             console.log(`Closed ${totalClosed} duplicate tabs using ${settings.urlSensitivity} sensitivity and strategy: ${settings.duplicateStrategy}`);
-
         }
         
         return totalClosed;

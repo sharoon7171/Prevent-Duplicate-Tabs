@@ -132,6 +132,7 @@ dev/
 # Test files
 test-results/
 coverage/
+test/
 
 # Documentation build
 docs/build/

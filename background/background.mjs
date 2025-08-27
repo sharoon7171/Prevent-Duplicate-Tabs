@@ -59,7 +59,25 @@ chrome.storage.onChanged.addListener(async (changes, namespace) => {
         
         // If extension settings changed, remove all existing duplicates
         if (changes.extensionEnabled) {
-            console.log('Extension settings changed - removing existing duplicates');
+            console.log('Extension enabled setting changed - removing existing duplicates');
+            await removeAllDuplicateTabs();
+        }
+        
+        // If duplicate strategy changed, remove all existing duplicates
+        if (changes.duplicateStrategy) {
+            console.log('Duplicate strategy setting changed - removing existing duplicates');
+            await removeAllDuplicateTabs();
+        }
+        
+        // If URL sensitivity changed, remove all existing duplicates
+        if (changes.urlSensitivity) {
+            console.log('URL sensitivity setting changed - removing existing duplicates');
+            await removeAllDuplicateTabs();
+        }
+        
+        // If whitelist entries changed, remove all existing duplicates
+        if (changes.whitelistEntries) {
+            console.log('Whitelist entries changed - removing existing duplicates');
             await removeAllDuplicateTabs();
         }
     }

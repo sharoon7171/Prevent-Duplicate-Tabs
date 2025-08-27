@@ -5,13 +5,9 @@ import {
     updateWhitelistEntry, 
     removeWhitelistEntry,
     clearAllWhitelistEntries,
-    validateWhitelistEntry 
+    validateWhitelistEntry,
+    normalizeUrl
 } from '../../functions/utils/whitelistUtils.mjs';
-import { 
-    WHITELIST_TYPES, 
-    WHITELIST_TYPE_LABELS, 
-    WHITELIST_TYPE_DESCRIPTIONS 
-} from '../../constants/config/whitelistConfig.mjs';
 
 export class WhitelistManager {
     constructor(containerId) {
@@ -66,28 +62,9 @@ export class WhitelistManager {
                 </div>
                 
                 <div class="whitelist-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="whitelistUrl">URL or Domain</label>
-                            <input type="text" id="whitelistUrl" placeholder="https://example.com or example.com/page">
-                        </div>
-                        <div class="form-group">
-                            <label for="whitelistType">Type</label>
-                            <select id="whitelistType">
-                                <option value="${WHITELIST_TYPES.EXACT_URL}">${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.EXACT_URL]}</option>
-                                <option value="${WHITELIST_TYPES.IGNORE_PARAMETERS}">${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.IGNORE_PARAMETERS]}</option>
-                                <option value="${WHITELIST_TYPES.COMPLETE_DOMAIN}">${WHITELIST_TYPE_LABELS[WHITELIST_TYPES.COMPLETE_DOMAIN]}</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="whitelistTypeInfo" class="info-label">Type Information</label>
-                            <div id="whitelistTypeInfo" class="type-info">
-                                ${WHITELIST_TYPE_DESCRIPTIONS[WHITELIST_TYPES.EXACT_URL]}
-                            </div>
-                        </div>
+                    <div class="form-group full-width">
+                        <label for="whitelistUrl">URL or Domain</label>
+                        <input type="text" id="whitelistUrl" placeholder="https://example.com or example.com">
                     </div>
                     
                     <div class="form-actions">
@@ -120,7 +97,6 @@ export class WhitelistManager {
             <div class="whitelist-entry" data-id="${entry.id}">
                 <div class="entry-content">
                     <div class="entry-url">${this.formatUrl(entry.url)}</div>
-                    <div class="entry-type">${WHITELIST_TYPE_LABELS[entry.type]}</div>
                     <div class="entry-date">Added: ${new Date(entry.createdAt).toLocaleDateString()}</div>
                 </div>
                 <div class="entry-actions">
@@ -132,11 +108,13 @@ export class WhitelistManager {
     }
     
     formatUrl(url) {
+        // Normalize URL for consistent display
+        const normalizedUrl = normalizeUrl(url);
         // Truncate long URLs for display
-        if (url.length > 50) {
-            return url.substring(0, 47) + '...';
+        if (normalizedUrl.length > 50) {
+            return normalizedUrl.substring(0, 47) + '...';
         }
-        return url;
+        return normalizedUrl;
     }
     
     bindEvents() {
@@ -149,13 +127,24 @@ export class WhitelistManager {
         updateBtn?.addEventListener('click', () => this.handleUpdate());
         cancelBtn?.addEventListener('click', () => this.cancelEdit());
         
-        // Type change handler
-        const typeSelect = document.getElementById('whitelistType');
-        typeSelect?.addEventListener('change', () => this.updateTypeInfo());
+        // Enter key support for domain input field
+        const urlInput = document.getElementById('whitelistUrl');
+        urlInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (this.editingEntry) {
+                    this.handleUpdate();
+                } else {
+                    this.handleAdd();
+                }
+            }
+        });
+        
+        // Type change handler removed - no more type field
         
         // Clear all button
         const clearAllBtn = document.getElementById('clearAllBtn');
-        clearAllBtn?.addEventListener('click', () => this.handleClearAll());
+        clearAllBtn?.addEventListener('click', () => this.showClearAllConfirmation());
         
         // Entry action buttons
         this.bindEntryActions();
@@ -179,29 +168,20 @@ export class WhitelistManager {
         });
     }
     
-    updateTypeInfo() {
-        const typeSelect = document.getElementById('whitelistType');
-        const typeInfo = document.getElementById('whitelistTypeInfo');
-        
-        if (typeSelect && typeInfo) {
-            const selectedType = typeSelect.value;
-            typeInfo.textContent = WHITELIST_TYPE_DESCRIPTIONS[selectedType];
-        }
-    }
+    // updateTypeInfo function removed - no more type field
     
     async handleAdd() {
         const url = document.getElementById('whitelistUrl').value.trim();
-        const type = document.getElementById('whitelistType').value;
         
         // Validate entry
-        const validation = validateWhitelistEntry({ url, type });
+        const validation = validateWhitelistEntry({ url });
         if (!validation.isValid) {
             this.showError(validation.errors.join(', '));
             return;
         }
         
         try {
-            await addWhitelistEntry({ url, type });
+            await addWhitelistEntry({ url });
             await this.loadEntries();
             this.render();
             this.bindEvents();
@@ -216,17 +196,16 @@ export class WhitelistManager {
         if (!this.editingEntry) return;
         
         const url = document.getElementById('whitelistUrl').value.trim();
-        const type = document.getElementById('whitelistType').value;
         
         // Validate entry
-        const validation = validateWhitelistEntry({ url, type });
+        const validation = validateWhitelistEntry({ url });
         if (!validation.isValid) {
             this.showError(validation.errors.join(', '));
             return;
         }
         
         try {
-            await updateWhitelistEntry(this.editingEntry.id, { url, type });
+            await updateWhitelistEntry(this.editingEntry.id, { url });
             await this.loadEntries();
             this.render();
             this.bindEvents();
@@ -246,10 +225,6 @@ export class WhitelistManager {
         
         // Populate form
         document.getElementById('whitelistUrl').value = entry.url;
-        document.getElementById('whitelistType').value = entry.type;
-        
-        // Update type info
-        this.updateTypeInfo();
         
         // Show update buttons
         document.getElementById('addWhitelistBtn').style.display = 'none';
@@ -271,10 +246,53 @@ export class WhitelistManager {
     }
     
     async deleteEntry(id) {
-        if (!confirm('Are you sure you want to delete this whitelist entry?')) {
-            return;
-        }
+        this.showDeleteConfirmation(id);
+    }
+    
+    showDeleteConfirmation(id) {
+        // Create confirmation overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'confirmation-overlay';
+        overlay.innerHTML = `
+            <div class="confirmation-dialog">
+                <div class="confirmation-header">
+                    <h4>Confirm Deletion</h4>
+                </div>
+                <div class="confirmation-content">
+                    <p>Are you sure you want to delete this whitelist entry?</p>
+                    <p class="confirmation-warning">This action cannot be undone.</p>
+                </div>
+                <div class="confirmation-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        `;
         
+        document.body.appendChild(overlay);
+        
+        // Bind confirmation events
+        const cancelBtn = overlay.querySelector('#cancelDeleteBtn');
+        const confirmBtn = overlay.querySelector('#confirmDeleteBtn');
+        
+        cancelBtn.addEventListener('click', () => {
+            document.body.removeChild(overlay);
+        });
+        
+        confirmBtn.addEventListener('click', async () => {
+            document.body.removeChild(overlay);
+            await this.confirmDeleteEntry(id);
+        });
+        
+        // Close on overlay click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                document.body.removeChild(overlay);
+            }
+        });
+    }
+    
+    async confirmDeleteEntry(id) {
         try {
             await removeWhitelistEntry(id);
             await this.loadEntries();
@@ -286,11 +304,50 @@ export class WhitelistManager {
         }
     }
     
-    async handleClearAll() {
-        if (!confirm('Are you sure you want to clear all whitelist entries? This action cannot be undone.')) {
-            return;
-        }
+    showClearAllConfirmation() {
+        // Create confirmation overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'confirmation-overlay';
+        overlay.innerHTML = `
+            <div class="confirmation-dialog">
+                <div class="confirmation-header">
+                    <h4>Confirm Clear All</h4>
+                </div>
+                <div class="confirmation-content">
+                    <p>Are you sure you want to clear all whitelist entries?</p>
+                    <p class="confirmation-warning">This action cannot be undone.</p>
+                </div>
+                <div class="confirmation-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelClearAllBtn">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmClearAllBtn">Clear All</button>
+                </div>
+            </div>
+        `;
         
+        document.body.appendChild(overlay);
+        
+        // Bind confirmation events
+        const cancelBtn = overlay.querySelector('#cancelClearAllBtn');
+        const confirmBtn = overlay.querySelector('#confirmClearAllBtn');
+        
+        cancelBtn.addEventListener('click', () => {
+            document.body.removeChild(overlay);
+        });
+        
+        confirmBtn.addEventListener('click', async () => {
+            document.body.removeChild(overlay);
+            await this.handleClearAll();
+        });
+        
+        // Close on overlay click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                document.body.removeChild(overlay);
+            }
+        });
+    }
+    
+    async handleClearAll() {
         try {
             await this.clearAllEntries();
             await this.loadEntries();
@@ -313,8 +370,6 @@ export class WhitelistManager {
     
     clearForm() {
         document.getElementById('whitelistUrl').value = '';
-        document.getElementById('whitelistType').value = WHITELIST_TYPES.EXACT_URL;
-        this.updateTypeInfo();
     }
     
     showSuccess(message) {

@@ -2,7 +2,7 @@
 import { STORAGE_KEYS, DEFAULT_WHITELIST } from '../../constants/config/whitelistConfig.mjs';
 
 /**
- * Get all whitelist entries from storage
+ * Get all whitelist entries with backward compatibility
  * @returns {Promise<Array>} Array of whitelist entries
  */
 export async function getWhitelistEntries() {
@@ -13,8 +13,28 @@ export async function getWhitelistEntries() {
             return DEFAULT_WHITELIST;
         }
         
-        const result = await chrome.storage.sync.get([STORAGE_KEYS.WHITELIST_ENTRIES]);
-        return result[STORAGE_KEYS.WHITELIST_ENTRIES] || DEFAULT_WHITELIST;
+        const result = await chrome.storage.sync.get(STORAGE_KEYS.WHITELIST_ENTRIES);
+        let entries = result[STORAGE_KEYS.WHITELIST_ENTRIES] || DEFAULT_WHITELIST;
+        
+        // Migration: Remove type field from existing entries for backward compatibility
+        let needsMigration = false;
+        entries = entries.map(entry => {
+            if (entry.type) {
+                needsMigration = true;
+                // Remove type field and keep only essential fields
+                const { type, ...cleanEntry } = entry;
+                return cleanEntry;
+            }
+            return entry;
+        });
+        
+        // If migration was needed, save the cleaned entries
+        if (needsMigration) {
+            await chrome.storage.sync.set({ [STORAGE_KEYS.WHITELIST_ENTRIES]: entries });
+            console.log('Migrated whitelist entries to new format (removed type field)');
+        }
+        
+        return entries;
     } catch (error) {
         console.error('Error getting whitelist entries:', error);
         return DEFAULT_WHITELIST;
@@ -25,7 +45,6 @@ export async function getWhitelistEntries() {
  * Add a new whitelist entry
  * @param {Object} entry - Whitelist entry object
  * @param {string} entry.url - URL or domain to whitelist
- * @param {string} entry.type - Type of whitelist (exactUrl, ignoreParameters, completeDomain)
  * @returns {Promise<boolean>} Success status
  */
 export async function addWhitelistEntry(entry) {
@@ -38,27 +57,26 @@ export async function addWhitelistEntry(entry) {
         const entries = await getWhitelistEntries();
         
         // Validate entry
-        if (!entry.url || !entry.type) {
-            throw new Error('Invalid whitelist entry: missing URL or type');
+        if (!entry.url) {
+            throw new Error('Invalid whitelist entry: missing URL');
         }
         
         // Normalize URL for better duplicate detection
         const normalizedUrl = normalizeUrl(entry.url);
         
-        // Check for duplicates
+        // Check for duplicates (all entries are now domain-only)
         const isDuplicate = entries.some(existing => 
-            normalizeUrl(existing.url) === normalizedUrl && existing.type === entry.type
+            normalizeUrl(existing.url) === normalizedUrl
         );
         
         if (isDuplicate) {
             throw new Error('Whitelist entry already exists');
         }
         
-        // Add new entry with ID and timestamp
+        // Add new entry with ID and timestamp (no type field)
         const newEntry = {
             id: generateId(),
             url: entry.url.trim(),
-            type: entry.type,
             createdAt: Date.now(),
             updatedAt: Date.now()
         };
@@ -140,7 +158,7 @@ export async function clearAllWhitelistEntries() {
         console.log('All whitelist entries cleared');
         return true;
     } catch (error) {
-        console.error('Error clearing whitelist entries:', error);
+        console.error('Error clearing all whitelist entries:', error);
         throw error;
     }
 }
@@ -155,36 +173,19 @@ export async function isUrlWhitelisted(url) {
         const entries = await getWhitelistEntries();
         
         return entries.some(entry => {
-            switch (entry.type) {
-                case 'exactUrl':
-                    // Use normalizeUrl for consistent comparison
-                    const normalizedUrl = normalizeUrl(url);
-                    const normalizedEntry = normalizeUrl(entry.url);
-                    return normalizedUrl === normalizedEntry;
-                    
-                case 'ignoreParameters':
-                    // Use normalizeUrl for consistent comparison
-                    const normalizedUrlIgnore = normalizeUrl(url);
-                    const normalizedEntryIgnore = normalizeUrl(entry.url);
-                    return normalizedUrlIgnore === normalizedEntryIgnore;
-                    
-                case 'completeDomain':
-                    try {
-                        const urlObj = new URL(url);
-                        const entryObj = new URL(entry.url);
-                        // Both hostnames are already normalized by extractHostname
-                        return urlObj.hostname.replace(/^www\./, '') === entryObj.hostname.replace(/^www\./, '');
-                    } catch (error) {
-                        // If entry is not a valid URL, try direct domain comparison
-                        const urlHostname = extractHostname(url);
-                        const entryHostname = extractHostname(entry.url);
-                        
-                        // Both hostnames are already normalized (no www)
-                        return urlHostname === entryHostname;
-                    }
-                    
-                default:
-                    return false;
+            // All entries are now domain-only whitelists
+            // Complete domain match (ignores path, parameters, and fragments)
+            try {
+                const urlObj = new URL(url);
+                const entryObj = new URL(entry.url);
+                const urlHostname = urlObj.hostname.replace(/^www\./, '');
+                const entryHostname = entryObj.hostname.replace(/^www\./, '');
+                return urlHostname === entryHostname;
+            } catch (error) {
+                // If entry is not a valid URL, try direct domain comparison
+                const urlHostname = extractHostname(url);
+                const entryHostname = extractHostname(entry.url);
+                return urlHostname === entryHostname;
             }
         });
     } catch (error) {
@@ -206,24 +207,18 @@ function generateId() {
  * @param {string} url - URL or domain string
  * @returns {string} Normalized URL
  */
-function normalizeUrl(url) {
+export function normalizeUrl(url) {
     try {
         // If it's a valid URL, normalize it
         const urlObj = new URL(url);
-        // Remove www prefix and normalize hostname
-        const hostname = urlObj.hostname.replace(/^www\./, '');
-        // Keep path but remove trailing slash
-        const path = urlObj.pathname.replace(/\/$/, '');
-        return hostname + path;
+        // Remove www prefix and normalize hostname only (domain-only whitelists)
+        return urlObj.hostname.replace(/^www\./, '');
     } catch (error) {
         // If it's not a valid URL, assume it's a domain
         // Remove protocol if present
         const cleanUrl = url.replace(/^https?:\/\//, '');
-        // Remove www prefix
-        const withoutWww = cleanUrl.replace(/^www\./, '');
-        // Keep path but remove query parameters, fragments, and trailing slash
-        const normalized = withoutWww.split('?')[0].split('#')[0].replace(/\/$/, '');
-        return normalized;
+        // Remove www prefix and return only hostname
+        return cleanUrl.replace(/^www\./, '').split('/')[0];
     }
 }
 
@@ -263,39 +258,20 @@ function extractHostname(url) {
 export function validateWhitelistEntry(entry) {
     const errors = [];
     
-    if (!entry.url || typeof entry.url !== 'string') {
-        errors.push('URL is required and must be a string');
-    } else if (entry.url.trim() === '') {
+    if (!entry.url || entry.url.trim() === '') {
         errors.push('URL cannot be empty');
     }
     
-    if (!entry.type || !['exactUrl', 'ignoreParameters', 'completeDomain'].includes(entry.type)) {
-        errors.push('Valid type is required');
-    }
-    
-    // Validate URL format based on type
-    if (entry.url && entry.type) {
+    // Validate URL format (all entries are now domain-only)
+    if (entry.url) {
         try {
-            if (entry.type === 'completeDomain') {
-                // For complete domain, ensure it's a valid domain
-                const hostname = extractHostname(entry.url);
-                if (!hostname || hostname.includes(' ')) {
-                    errors.push('Invalid domain format');
-                }
-            } else {
-                // For other types, try to validate URL but be more flexible
-                try {
-                    new URL(entry.url);
-                } catch (urlError) {
-                    // If not a valid URL, check if it's a valid domain
-                    const hostname = extractHostname(entry.url);
-                    if (!hostname || hostname.includes(' ')) {
-                        errors.push('Invalid URL or domain format');
-                    }
-                }
+            // For all entries, ensure it's a valid domain
+            const hostname = extractHostname(entry.url);
+            if (!hostname || hostname.includes(' ')) {
+                errors.push('Invalid domain format');
             }
         } catch (error) {
-            errors.push('Invalid URL or domain format');
+            errors.push('Invalid domain format');
         }
     }
     
@@ -303,4 +279,60 @@ export function validateWhitelistEntry(entry) {
         isValid: errors.length === 0,
         errors
     };
+}
+
+/**
+ * Check if a new whitelist entry would be redundant or duplicate
+ * @param {Object} newEntry - New whitelist entry to check
+ * @returns {Promise<Object>} Object with isRedundant flag and reason
+ */
+export async function checkWhitelistRedundancy(newEntry) {
+    try {
+        const entries = await getWhitelistEntries();
+        
+        for (const existingEntry of entries) {
+            // Check if new entry is already covered by existing entry
+            if (isEntryCoveredBy(newEntry, existingEntry)) {
+                return {
+                    isRedundant: true,
+                    reason: `This entry is already covered by existing rule: ${existingEntry.url}`,
+                    existingEntry
+                };
+            }
+            
+            // Check if new entry would cover existing entry
+            if (isEntryCoveredBy(existingEntry, newEntry)) {
+                return {
+                    isRedundant: true,
+                    reason: `This entry would make existing rule redundant: ${existingEntry.url}`,
+                    existingEntry,
+                    suggestion: 'Consider removing the existing rule instead'
+                };
+            }
+        }
+        
+        return { isRedundant: false };
+    } catch (error) {
+        console.error('Error checking whitelist redundancy:', error);
+        return { isRedundant: false, error: error.message };
+    }
+}
+
+/**
+ * Check if one entry is covered by another entry
+ * @param {Object} entry1 - First entry to check
+ * @param {Object} entry2 - Second entry to check
+ * @returns {boolean} True if entry1 is covered by entry2
+ */
+function isEntryCoveredBy(entry1, entry2) {
+    try {
+        // All entries are now domain-only whitelists
+        // Check if entry1's domain is covered by entry2's domain
+        const entry1Hostname = extractHostname(entry1.url);
+        const entry2Hostname = extractHostname(entry2.url);
+        return entry1Hostname === entry2Hostname;
+    } catch (error) {
+        console.error('Error checking if entry is covered by another:', error);
+        return false;
+    }
 }
