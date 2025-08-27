@@ -318,20 +318,10 @@ export class WhitelistManager {
     }
     
     showSuccess(message) {
-        // Integrate with existing toast system if available
-        if (window.showToast) {
-            window.showToast(message, 'success', 3000);
-        } else {
-            console.log('Success:', message);
-        }
+        console.log('Success:', message);
     }
     
     showError(message) {
-        // Integrate with existing toast system if available
-        if (window.showToast) {
-            window.showToast(message, 'error', 5000);
-        } else {
-            console.error('Error:', message);
-        }
+        console.error('Error:', message);
     }
 }

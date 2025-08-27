@@ -5,10 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prevent Duplicate Tabs</title>
     <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="../src/styles/components/header.css">
+    <link rel="stylesheet" href="../src/styles/components/optionGroup.css">
+    <link rel="stylesheet" href="../src/styles/components/toggleSwitch.css">
+    <link rel="stylesheet" href="../src/styles/components/radioGroup.css">
+    <link rel="stylesheet" href="../src/styles/components/loadingSpinner.css">
+    <link rel="stylesheet" href="../src/styles/components/button.css">
 </head>
 <body>
     <div class="popup-container">
-        <!-- Empty popup - customize later -->
+        <!-- Loading spinner container -->
+        <div id="loadingSpinnerContainer"></div>
+        
+        <!-- Header -->
+        <div id="headerContainer"></div>
+        
+        <!-- Option Group 1: Enable Extension -->
+        <div id="enableGroupContainer"></div>
+        
+        <!-- Option Group 2: Duplicate Strategy -->
+        <div id="strategyGroupContainer"></div>
+        
+        <!-- Option Group 3: URL Sensitivity -->
+        <div id="sensitivityGroupContainer"></div>
+        
+        <!-- Reset Button Section -->
+        <div class="action-buttons">
+            <div id="resetButtonContainer"></div>
+        </div>
     </div>
     <script type="module" src="popup.mjs"></script>
 </body>

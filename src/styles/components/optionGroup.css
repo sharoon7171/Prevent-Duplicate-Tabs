@@ -1,0 +1,107 @@
+/* Reusable Option Group Component Styles */
+.option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;    /* Back to original compact spacing */
+    padding: 1rem;          /* Back to original padding */
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.option-label {
+    margin-left: 1.5rem;
+    flex: 1;
+}
+
+.option-label h3 {
+    margin: 0 0 0.25rem 0;  /* Back to original spacing */
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.option-label p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.3;       /* Back to original line height */
+}
+
+.option-controls {
+    flex-shrink: 0;
+}
+
+/* Strategy Group - Special styling for radio options */
+.strategy-group {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;          /* Same padding as other groups */
+    margin-bottom: 1rem;    /* Same margin as other groups */
+}
+
+/* Sensitivity Group - Special styling for radio options */
+.sensitivity-group {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;          /* Same padding as other groups */
+    margin-bottom: 1rem;    /* Same margin as other groups */
+}
+
+/* Responsive Design */
+@media (max-width: 620px) {
+    .option-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        margin-bottom: 1rem;  /* Same spacing on mobile */
+    }
+    
+    .option-label {
+        margin-left: 0;
+        text-align: center;
+    }
+    
+    .option-controls {
+        align-self: center;
+    }
+}
+
+/* Popup-specific compact styling */
+.popup-container .option-group {
+    margin-bottom: 0.5rem !important;     /* Much more compact spacing */
+    padding: 0.5rem !important;           /* Much more compact padding */
+    align-items: flex-start !important;   /* Left align option groups */
+}
+
+.popup-container .option-label {
+    margin-left: 0 !important;            /* Remove left margin for left alignment */
+    text-align: left !important;          /* Left align labels */
+}
+
+.popup-container .option-label h3 {
+    font-size: 0.9rem !important;        /* Smaller title font for reduced width */
+    margin: 0 0 0.15rem 0 !important;     /* Much more compact spacing */
+    text-align: left !important;          /* Left align titles */
+}
+
+.popup-container .option-label p {
+    font-size: 0.75rem !important;         /* Smaller description font for reduced width */
+    line-height: 1.1 !important;          /* Much more compact line height */
+    text-align: left !important;          /* Left align descriptions */
+}
+
+.popup-container .strategy-group,
+.popup-container .sensitivity-group {
+    padding: 0.5rem !important;           /* Much more compact padding */
+    margin-bottom: 0.5rem !important;     /* Much more compact margin */
+    align-items: flex-start !important;   /* Left align strategy and sensitivity groups */
+}
+
+/* Override mobile media query for popup */
+.popup-container .option-label {
+    text-align: left !important;          /* Override mobile center alignment */
+}
+
+.popup-container .option-controls {
+    align-self: flex-start !important;    /* Left align controls instead of center */
+}

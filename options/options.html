@@ -5,122 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prevent Duplicate Tabs - Options</title>
     <link rel="stylesheet" href="options.css">
+    <link rel="stylesheet" href="../src/styles/components/header.css">
+    <link rel="stylesheet" href="../src/styles/components/optionGroup.css">
+    <link rel="stylesheet" href="../src/styles/components/toggleSwitch.css">
+    <link rel="stylesheet" href="../src/styles/components/radioGroup.css">
+    <link rel="stylesheet" href="../src/styles/components/loadingSpinner.css">
+    <link rel="stylesheet" href="../src/styles/components/button.css">
     <link rel="stylesheet" href="../src/styles/components/whitelistManager.css">
 </head>
 <body>
     <div class="options-container">
-        <header>
-            <div class="header-content">
-                <img src="../assets/icons/icon48.png" alt="Extension Icon" class="header-icon">
-                <div class="header-text">
-                    <h1>Prevent Duplicate Tabs</h1>
-                    <p>Extension Options</p>
-                </div>
-            </div>
-        </header>
+        <div id="headerContainer"></div>
         <main>
             <div class="options-form">
-                <!-- Loading overlay -->
-                <div id="loadingOverlay" class="loading-overlay">
-                    <div class="loading-spinner"></div>
-                    <p>Loading settings...</p>
-                </div>
+                <!-- Loading overlay container -->
+                <div id="loadingOverlayContainer"></div>
                 
                 <!-- Options form content -->
                 <div id="optionsForm" style="display: none;">
-                    <div class="option-group">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="extensionEnabled">
-                            <span class="slider"></span>
-                        </label>
-                        <div class="option-label">
-                            <h3>Enable Extension</h3>
-                            <p>Turn the extension on or off completely. When enabled, automatically prevents duplicate tabs.</p>
-                        </div>
-                    </div>
+                    <!-- Option Group 1: Enable Extension -->
+                    <div id="enableGroupContainer"></div>
                     
-                    <div class="option-group strategy-group">
-                        <div class="option-label">
-                            <h3>Duplicate Handling Strategy</h3>
-                            <p>Choose how the extension handles duplicate tabs when they are detected.</p>
-                        </div>
-                        <div class="radio-options">
-                            <label class="radio-option">
-                                <input type="radio" name="duplicateStrategy" value="closeNewStayCurrent" checked>
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Close new tab, stay on current tab</strong>
-                                    <span>Closes the duplicate tab and keeps you where you are</span>
-                                </div>
-                            </label>
-                            
-                            <label class="radio-option">
-                                <input type="radio" name="duplicateStrategy" value="closeNewGoToOriginal">
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Close new tab, navigate to original tab</strong>
-                                    <span>Closes the duplicate and takes you to the original</span>
-                                </div>
-                            </label>
-                            
-                            <label class="radio-option">
-                                <input type="radio" name="duplicateStrategy" value="closeExistingStayCurrent">
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Close existing tab, stay on current tab</strong>
-                                    <span>Closes existing duplicates and keeps you where you are</span>
-                                </div>
-                            </label>
-                            
-                            <label class="radio-option">
-                                <input type="radio" name="duplicateStrategy" value="closeExistingGoToNew">
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Close existing tab, navigate to new tab</strong>
-                                    <span>Closes existing duplicates and takes you to the new tab</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
+                    <!-- Option Group 2: Duplicate Strategy -->
+                    <div id="strategyGroupContainer"></div>
                     
-                    <div class="option-group sensitivity-group">
-                        <div class="option-label">
-                            <h3>URL Sensitivity</h3>
-                            <p>Choose how strictly the extension detects duplicate tabs based on URL matching.</p>
-                        </div>
-                        <div class="radio-options">
-                            <label class="radio-option">
-                                <input type="radio" name="urlSensitivity" value="exactUrl" checked>
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Exact same URL</strong>
-                                    <span>Only exact URL matches are considered duplicates (most strict)</span>
-                                </div>
-                            </label>
-                            
-                            <label class="radio-option">
-                                <input type="radio" name="urlSensitivity" value="ignoreParameters">
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Ignore parameters</strong>
-                                    <span>Ignores query strings and fragments, but keeps path</span>
-                                </div>
-                            </label>
-                            
-                            <label class="radio-option">
-                                <input type="radio" name="urlSensitivity" value="exactDomain">
-                                <span class="radio-custom"></span>
-                                <div class="radio-text">
-                                    <strong>Exact domain</strong>
-                                    <span>Only domain matters, ignores path, parameters, and fragments (least strict)</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
+                    <!-- Option Group 3: URL Sensitivity -->
+                    <div id="sensitivityGroupContainer"></div>
                     
-                    <div class="action-buttons">
-                        <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
-                    </div>
                 </div>
                 
                 <!-- Whitelist Management Section -->
@@ -128,8 +39,11 @@
             </div>
         </main>
         
-        <!-- Toast Notification Container -->
-        <div id="toastContainer" class="toast-container"></div>
+        <!-- Reset Button Section -->
+        <div class="action-buttons">
+            <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
+        </div>
+        
         <footer>
             <div class="footer-content">
                 <div class="footer-copyright">

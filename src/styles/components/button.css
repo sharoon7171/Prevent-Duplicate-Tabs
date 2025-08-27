@@ -1,0 +1,61 @@
+/* Reusable Button Component Styles */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Popup-specific button styling */
+.popup-container .btn {
+    padding: 10px 20px;        /* More compact for popup */
+    font-size: 13px;           /* Smaller font for popup */
+}
+
+/* Action buttons container styling */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem 0;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Popup-specific action buttons */
+.popup-container .action-buttons {
+    margin: 0.75rem 0 1rem 0;  /* More compact spacing */
+    padding: 0.75rem;          /* More compact padding */
+}

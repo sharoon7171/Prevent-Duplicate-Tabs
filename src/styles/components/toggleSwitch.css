@@ -1,0 +1,96 @@
+/* Reusable Toggle Switch Component Styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Disabled state */
+.toggle-switch input:disabled + .slider {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.toggle-switch input:disabled + .slider:before {
+    background-color: #adb5bd;
+}
+
+/* Responsive Design */
+@media (max-width: 620px) {
+    .toggle-switch {
+        width: 50px;
+        height: 28px;
+    }
+    
+    .slider:before {
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+    }
+    
+    input:checked + .slider:before {
+        transform: translateX(22px);
+    }
+}
+
+/* Popup-specific compact styling */
+.popup-container .toggle-switch {
+    width: 44px;               /* Even smaller toggle switch */
+    height: 24px;
+}
+
+.popup-container .slider:before {
+    height: 18px;              /* Even smaller slider circle */
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+}
+
+.popup-container input:checked + .slider:before {
+    transform: translateX(20px); /* Adjust transform for smaller size */
+}

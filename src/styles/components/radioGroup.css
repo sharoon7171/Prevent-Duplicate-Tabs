@@ -1,0 +1,153 @@
+/* Reusable Radio Group Component Styles */
+.radio-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.radio-option {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    background-color: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.radio-option:hover {
+    border-color: #2196F3;
+    background-color: #f8f9ff;
+}
+
+.radio-option input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.radio-custom {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom {
+    border-color: #2196F3;
+    background-color: #2196F3;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.radio-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.radio-text strong {
+    color: #2c3e50;
+    font-size: 1rem;
+    line-height: 1.3;
+}
+
+.radio-text span {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .radio-options {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 620px) {
+    .radio-options {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .radio-option {
+        padding: 1.5rem;
+        min-height: 80px;
+    }
+    
+    .radio-text strong {
+        font-size: 1.1rem;
+    }
+    
+    .radio-text span {
+        font-size: 1rem;
+    }
+}
+
+/* Popup-specific compact styling */
+.popup-container .radio-options {
+    gap: 0.5rem !important;               /* Much more compact gap */
+    margin-top: 0.5rem !important;        /* Much more compact margin */
+}
+
+.popup-container .radio-option {
+    padding: 0.5rem !important;           /* Much more compact padding */
+}
+
+.popup-container .radio-text {
+    gap: 0 !important;                    /* Remove gap to eliminate extra space */
+    flex-direction: row !important;       /* Use row layout for better space utilization */
+    align-items: flex-start !important;   /* Left align items for consistency */
+}
+
+.popup-container .radio-text strong {
+    font-size: 0.8rem !important;        /* Smaller font for reduced width */
+    line-height: 1.1 !important;          /* Much more compact line height */
+}
+
+.popup-container .radio-text span {
+    font-size: 0.7rem !important;        /* Smaller font for reduced width */
+    line-height: 1.1 !important;          /* Much more compact line height */
+}
+
+.popup-container .radio-custom {
+    width: 16px !important;               /* Even smaller radio button */
+    height: 16px !important;
+    margin-right: 0.5rem !important;      /* Much more compact margin */
+}
+
+/* Override mobile media query for popup */
+.popup-container .radio-option {
+    min-height: auto !important;          /* Remove minimum height constraint */
+}
+
+/* Additional popup-specific spacing fixes */
+.popup-container .radio-option {
+    align-items: flex-start !important;   /* Left align for consistent left-to-right layout */
+}
+
+.popup-container .radio-custom {
+    margin-top: 0 !important;             /* Remove top margin */
+}
