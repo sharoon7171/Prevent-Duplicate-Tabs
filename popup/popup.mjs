@@ -5,15 +5,17 @@ import { ToggleSwitch } from '../src/components/ui/toggleSwitch.mjs';
 import { RadioGroup } from '../src/components/ui/radioGroup.mjs';
 import { LoadingSpinner } from '../src/components/ui/loadingSpinner.mjs';
 import { Button } from '../src/components/ui/button.mjs';
+import { PopupWhitelist } from '../src/components/ui/popupWhitelist.mjs';
 import { getExtensionSettings, setExtensionEnabled, setDuplicateStrategy, setUrlSensitivity } from '../src/functions/utils/storageUtils.mjs';
 import { resetAllSettings } from '../src/functions/utils/resetUtils.mjs';
 import { storageListener } from '../src/functions/utils/storageListener.mjs';
 import { STORAGE_KEYS } from '../src/constants/config/extensionSettings.mjs';
+import { STORAGE_KEYS as WHITELIST_STORAGE_KEYS } from '../src/constants/config/whitelistConfig.mjs';
 
 console.log('Prevent Duplicate Tabs extension popup loaded');
 
 // Component instances
-let finalEnableToggle, finalStrategyRadios, finalSensitivityRadios, loadingSpinner, resetButton;
+let finalEnableToggle, finalStrategyRadios, finalSensitivityRadios, loadingSpinner, resetButton, popupWhitelist;
 
 // Initialize the popup
 async function initializePopup() {
@@ -84,8 +86,21 @@ async function initializePopup() {
             }
         });
         console.log('Toggle switch created');
+
+        // Initialize Option Group 2: Current Tab Whitelist
+        console.log('Initializing whitelist group...');
+        const whitelistGroup = new OptionGroup('whitelistGroupContainer', {
+            title: 'Current Tab Whitelist',
+            type: 'whitelist'
+        });
+        console.log('Whitelist group initialized');
         
-        // Initialize Option Group 2: Duplicate Strategy
+        // Initialize the popup whitelist component
+        console.log('Initializing popup whitelist component...');
+        popupWhitelist = new PopupWhitelist('whitelistGroupContainer');
+        console.log('Popup whitelist component initialized');
+        
+        // Initialize Option Group 3: Duplicate Strategy
         console.log('Initializing strategy group...');
         const strategyGroup = new OptionGroup('strategyGroupContainer', {
             title: 'Duplicate Handling Strategy',
@@ -135,7 +150,7 @@ async function initializePopup() {
         });
         console.log('Strategy radio group created');
         
-        // Initialize Option Group 3: URL Sensitivity
+        // Initialize Option Group 4: URL Sensitivity
         console.log('Initializing sensitivity group...');
         const sensitivityGroup = new OptionGroup('sensitivityGroupContainer', {
             title: 'URL Sensitivity',
@@ -248,6 +263,19 @@ async function initializePopup() {
             if (finalSensitivityRadios && newValue !== undefined) {
                 finalSensitivityRadios.setSelectedValue(newValue);
                 console.log('Sensitivity updated via storage:', newValue);
+            }
+        });
+
+        // Add whitelist storage listener for real-time syncing
+        storageListener.addListener(WHITELIST_STORAGE_KEYS.WHITELIST_ENTRIES, (newValue) => {
+            console.log('Popup: Whitelist entries updated via storage:', newValue);
+            console.log('Popup: popupWhitelist component:', popupWhitelist);
+            // Refresh the popup whitelist component if it exists
+            if (popupWhitelist && typeof popupWhitelist.refresh === 'function') {
+                console.log('Popup: Refreshing whitelist component...');
+                popupWhitelist.refresh();
+            } else {
+                console.log('Popup: Cannot refresh - component not available or missing refresh method');
             }
         });
         

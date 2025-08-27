@@ -1,0 +1,274 @@
+/* Popup Whitelist Component Styles */
+.whitelist-section {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.whitelist-section .section-header h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.whitelist-section .section-header p {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.current-url-info {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.url-display {
+    margin-bottom: 0.5rem;
+}
+
+.url-display strong {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.url-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85rem;
+    color: #007bff;
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+.domain-info {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.domain-info strong {
+    color: #333;
+}
+
+/* Whitelist Form Styles */
+.whitelist-form {
+    margin-top: 1rem;
+}
+
+.form-row {
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 0.75rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: #fff;
+    color: #333;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.info-label {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.type-info {
+    background: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    color: #0056b3;
+    line-height: 1.4;
+}
+
+.form-actions {
+    margin-top: 1rem;
+}
+
+/* Whitelist Status Styles */
+.whitelist-status {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.status-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.status-badge.whitelisted {
+    background: #28a745;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.entry-details {
+    font-size: 0.9rem;
+    color: #155724;
+}
+
+.entry-details div {
+    margin-bottom: 0.25rem;
+}
+
+.entry-details strong {
+    color: #155724;
+}
+
+.status-actions {
+    text-align: right;
+}
+
+/* Button Styles */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-small {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+/* Edit Form Styles */
+.whitelist-edit-form {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.whitelist-edit-form .form-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.whitelist-edit-form .btn-small {
+    min-width: 80px;
+}
+
+/* Error Message Styles */
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    padding: 1rem;
+    color: #721c24;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Message Toast Styles */
+.message-toast {
+    position: relative;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+.message-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.message-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Popup-specific adjustments */
+.popup-container .whitelist-section {
+    margin: 0.75rem 0;
+    padding: 0.75rem;
+}
+
+.popup-container .current-url-info {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.popup-container .whitelist-status {
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.popup-container .form-group select {
+    padding: 0.375rem;
+    font-size: 0.85rem;
+}
+
+.popup-container .type-info {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 400px) {
+    .status-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .status-actions {
+        text-align: left;
+    }
+}

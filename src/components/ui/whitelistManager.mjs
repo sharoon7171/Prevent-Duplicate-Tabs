@@ -324,4 +324,17 @@ export class WhitelistManager {
     showError(message) {
         console.error('Error:', message);
     }
+
+    // Refresh method to update the component when storage changes
+    async refresh() {
+        try {
+            console.log('WhitelistManager: Refreshing component...');
+            await this.loadEntries();
+            this.render();
+            this.bindEvents();
+            console.log('WhitelistManager: Component refreshed successfully');
+        } catch (error) {
+            console.error('WhitelistManager: Error refreshing component:', error);
+        }
+    }
 }

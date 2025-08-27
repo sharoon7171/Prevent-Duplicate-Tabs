@@ -11,6 +11,7 @@ import { getExtensionSettings, initializeDefaultSettings, setExtensionEnabled, s
 import { resetAllSettings } from '../src/functions/utils/resetUtils.mjs';
 import { storageListener } from '../src/functions/utils/storageListener.mjs';
 import { STORAGE_KEYS } from '../src/constants/config/extensionSettings.mjs';
+import { STORAGE_KEYS as WHITELIST_STORAGE_KEYS } from '../src/constants/config/whitelistConfig.mjs';
 
 console.log('Prevent Duplicate Tabs extension options page loaded');
 
@@ -161,8 +162,8 @@ async function initializeOptions() {
         console.log('Options: Whitelist container found:', whitelistContainer);
         
         if (whitelistContainer) {
-            const whitelistManager = new WhitelistManager('whitelistContainer');
-            console.log('Options: Whitelist manager created:', whitelistManager);
+            window.whitelistManager = new WhitelistManager('whitelistContainer');
+            console.log('Options: Whitelist manager created:', window.whitelistManager);
         } else {
             console.error('Options: Whitelist container not found!');
         }
@@ -190,6 +191,18 @@ async function initializeOptions() {
             if (sensitivityRadios && newValue !== undefined) {
                 sensitivityRadios.setSelectedValue(newValue);
                 console.log('Sensitivity updated via storage:', newValue);
+            }
+        });
+
+        // Add whitelist storage listener for real-time syncing
+        storageListener.addListener(WHITELIST_STORAGE_KEYS.WHITELIST_ENTRIES, (newValue) => {
+            console.log('Options: Whitelist entries updated via storage:', newValue);
+            // Refresh the whitelist manager if it exists
+            if (window.whitelistManager && typeof window.whitelistManager.refresh === 'function') {
+                console.log('Options: Refreshing whitelist manager...');
+                window.whitelistManager.refresh();
+            } else {
+                console.log('Options: Cannot refresh - whitelist manager not available or missing refresh method');
             }
         });
         
