@@ -207,6 +207,23 @@ async function initializePopup() {
                 }
             }
         });
+
+        // Initialize Options Button
+        const optionsButton = new Button('optionsButtonContainer', {
+            text: 'Open Options',
+            type: 'primary',
+            onClick: () => {
+                try {
+                    console.log('Opening options page...');
+                    // Open the options page in a new tab
+                    chrome.tabs.create({ url: chrome.runtime.getURL('options/options.html') });
+                    // Close the popup after opening options
+                    window.close();
+                } catch (error) {
+                    console.error('Error opening options page:', error);
+                }
+            }
+        });
         
         // Initialize storage listener for real-time syncing
         console.log('Initializing storage listener...');
