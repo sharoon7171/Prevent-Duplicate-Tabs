@@ -5,7 +5,7 @@ All notable changes to the "Prevent Duplicate Tabs" Chrome extension will be doc
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1] - 2024-12-19
+## [1.0.1]
 
 ### 🔧 Changed
 - **UI Layout Consistency**: Fixed inconsistent spacing between option groups in popup
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.0] - 2024-08-28
+## [1.0.0]
 
 ### 🚀 Added
 - **Duplicate Tab Prevention**: Core functionality to automatically detect and handle duplicate tabs
