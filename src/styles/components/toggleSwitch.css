@@ -20,7 +20,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #e2e8f0;
     transition: 0.4s;
     border-radius: 34px;
 }
@@ -38,11 +38,11 @@
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #3182ce;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #3182ce;
 }
 
 input:checked + .slider:before {
@@ -51,12 +51,12 @@ input:checked + .slider:before {
 
 /* Disabled state */
 .toggle-switch input:disabled + .slider {
-    background-color: #e9ecef;
+    background-color: #cbd5e0;
     cursor: not-allowed;
 }
 
 .toggle-switch input:disabled + .slider:before {
-    background-color: #adb5bd;
+    background-color: #a0aec0;
 }
 
 /* Responsive Design */
@@ -80,17 +80,17 @@ input:checked + .slider:before {
 
 /* Popup-specific compact styling */
 .popup-container .toggle-switch {
-    width: 44px;               /* Even smaller toggle switch */
+    width: 44px;
     height: 24px;
 }
 
 .popup-container .slider:before {
-    height: 18px;              /* Even smaller slider circle */
+    height: 18px;
     width: 18px;
     left: 3px;
     bottom: 3px;
 }
 
 .popup-container input:checked + .slider:before {
-    transform: translateX(20px); /* Adjust transform for smaller size */
+    transform: translateX(20px);
 }

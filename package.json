@@ -1,6 +1,6 @@
 {
   "name": "prevent-duplicate-tabs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chrome extension to prevent duplicate tabs from being opened",
   "author": "SQ Tech",
   "homepage": "https://sqtech.dev",

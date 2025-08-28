@@ -59,6 +59,7 @@ async function initializePopup() {
         console.log('Initializing enable group...');
         const enableGroup = new OptionGroup('enableGroupContainer', {
             title: 'Enable Extension',
+            description: 'Turn extension on/off',
             type: 'default'
         });
         console.log('Enable group initialized');
@@ -104,6 +105,7 @@ async function initializePopup() {
         console.log('Initializing strategy group...');
         const strategyGroup = new OptionGroup('strategyGroupContainer', {
             title: 'Duplicate Handling Strategy',
+            description: 'How to handle duplicates',
             type: 'strategy'
         });
         console.log('Strategy group initialized');
@@ -130,21 +132,25 @@ async function initializePopup() {
                 }
             },
             options: [
-                {
-                    value: 'closeNewStayCurrent',
-                    label: 'Close new tab, stay on current tab'
+                { 
+                    value: 'closeNewStayCurrent', 
+                    label: 'Close new tab, stay on current tab', 
+                    description: 'Prevents duplicate while keeping you on current page' 
                 },
-                {
-                    value: 'closeNewGoToOriginal',
-                    label: 'Close new tab, navigate to original tab'
+                { 
+                    value: 'closeNewGoToOriginal', 
+                    label: 'Close new tab, navigate to original tab', 
+                    description: 'Closes duplicate and takes you to original' 
                 },
-                {
-                    value: 'closeExistingStayCurrent',
-                    label: 'Close existing tab, stay on current tab'
+                { 
+                    value: 'closeExistingStayCurrent', 
+                    label: 'Close existing tab, stay on current tab', 
+                    description: 'Closes original duplicate, keeps you on new page' 
                 },
-                {
-                    value: 'closeExistingGoToNew',
-                    label: 'Close existing tab, navigate to new tab'
+                { 
+                    value: 'closeExistingGoToNew', 
+                    label: 'Close existing tab, navigate to new tab', 
+                    description: 'Closes original and takes you to new page' 
                 }
             ]
         });
@@ -154,6 +160,7 @@ async function initializePopup() {
         console.log('Initializing sensitivity group...');
         const sensitivityGroup = new OptionGroup('sensitivityGroupContainer', {
             title: 'URL Sensitivity',
+            description: 'URL matching strictness',
             type: 'sensitivity'
         });
         console.log('Sensitivity group initialized');
@@ -180,13 +187,15 @@ async function initializePopup() {
                 }
             },
             options: [
-                {
-                    value: 'exactUrl',
-                    label: 'Exact URL with Parameters'
+                { 
+                    value: 'exactUrl', 
+                    label: 'Exact URL with Parameters', 
+                    description: 'Exact same URL including parameters - only identical URLs are considered duplicates' 
                 },
-                {
-                    value: 'exactUrlIgnoreParams',
-                    label: 'Exact URL Ignore Parameters'
+                { 
+                    value: 'exactUrlIgnoreParams', 
+                    label: 'Exact URL Ignore Parameters', 
+                    description: 'Same URL but ignores parameters - URLs with same path are considered duplicates' 
                 }
             ]
         });

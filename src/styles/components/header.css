@@ -1,9 +1,31 @@
 /* Reusable Header Component Styles */
 .extension-header {
     text-align: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.75rem;
+    padding: 1.75rem;
+    background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+    border-radius: 16px;
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(49, 130, 206, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.extension-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3182ce 0%, #38a169 50%, #e53e3e 100%);
+    border-radius: 16px 16px 0 0;
+}
+
+.extension-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(49, 130, 206, 0.3);
 }
 
 .header-content {
@@ -17,7 +39,7 @@
     width: 48px;
     height: 48px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     flex-shrink: 0;
 }
 
@@ -29,25 +51,29 @@
 }
 
 .header-text h1 {
-    font-size: 1.75rem;
-    color: #2c3e50;
+    font-size: 1.8rem;
+    color: #ffffff;
     margin: 0;
     text-align: left;
     line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .header-text p {
-    font-size: 1rem;
-    color: #7f8c8d;
+    font-size: 1.05rem;
+    color: #e2e8f0;
     margin: 0;
     text-align: left;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 /* Responsive Design */
 @media (max-width: 620px) {
     .extension-header {
         margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
+        padding: 1rem;
     }
     
     .header-content {
@@ -70,32 +96,32 @@
 
 /* Popup-specific adjustments */
 .popup-container .extension-header {
-    margin-bottom: 0.5rem !important;     /* Much more compact spacing */
-    padding-bottom: 0.25rem !important;   /* Much more compact padding */
-    border-bottom: 1px solid #e0e0e0;
-    text-align: left !important;          /* Left align header for consistency */
+    margin-bottom: 0.5rem !important;
+    padding: 0.75rem !important;
+    text-align: left !important;
 }
 
 .popup-container .header-content {
-    justify-content: flex-start !important; /* Left align header content */
+    justify-content: flex-start !important;
 }
 
 .popup-container .header-text {
-    align-items: flex-start !important;   /* Left align header text */
+    align-items: flex-start !important;
 }
 
 .popup-container .header-text h1 {
-    font-size: 0.9rem !important;           /* Smaller title font for reduced width */
-    text-align: left !important;          /* Left align title */
+    font-size: 0.9rem !important;
+    text-align: left !important;
 }
 
 .popup-container .header-text p {
-    font-size: 0.7rem !important;        /* Smaller subtitle font for reduced width */
-    text-align: left !important;          /* Left align subtitle */
+    font-size: 0.7rem !important;
+    text-align: left !important;
+    color: #e2e8f0 !important;
 }
 
 .popup-container .header-icon {
-    width: 28px;               /* Smaller icon for reduced width */
+    width: 28px;
     height: 28px;
 }
 

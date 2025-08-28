@@ -9,17 +9,18 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f5f5f5;
+    color: #2d3748;
+    background-color: #ffffff;
 }
 
 .options-container {
     max-width: 700px;
     margin: 0 auto;
-    padding: 1rem;          /* Back to original padding */
-    background-color: white;
+    padding: 1rem;
+    background-color: #ffffff;
     min-height: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
 }
 
 main {
@@ -32,24 +33,36 @@ main {
     margin: 0 auto;
 }
 
-/* Action buttons styling */
-.action-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 1rem 0 1.5rem 0;  /* Top: 1rem, Bottom: 1.5rem to match footer margin-top */
-    padding: 1rem;
-    background-color: #f8f9fa;  /* Match option group background */
-    border-radius: 8px;         /* Match option group border radius */
-    border: 1px solid #e9ecef;  /* Match option group border */
-}
+/* Action buttons styling - REMOVED - Now using shared button.css */
 
 /* Button Styles - REMOVED - Now using reusable Button component */
 
 footer {
     margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 2px solid #e0e0e0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+    border-radius: 16px;
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(49, 130, 206, 0.15);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #38a169 0%, #e53e3e 50%, #f6ad55 100%);
+    border-radius: 16px 16px 0 0;
+}
+
+footer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(49, 130, 206, 0.25);
 }
 
 .footer-content {
@@ -58,23 +71,29 @@ footer {
     align-items: center;
     gap: 0.75rem;
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-copyright {
-    color: #6c757d;
+    color: #e2e8f0;
     font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .footer-copyright a {
-    color: #3498db;
-    text-decoration: none;
+    color: #fbbf24;
+    text-decoration: underline;
+    text-decoration-color: rgba(251, 191, 36, 0.4);
+    text-underline-offset: 2px;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .footer-copyright a:hover {
-    color: #2980b9;
+    color: #fde047;
     text-decoration: underline;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
 }
 
 .footer-links {
@@ -85,22 +104,26 @@ footer {
 }
 
 .footer-link {
-    color: #6c757d;
-    text-decoration: none;
+    color: #fbbf24;
+    text-decoration: underline;
+    text-decoration-color: rgba(251, 191, 36, 0.4);
+    text-underline-offset: 2px;
     font-weight: 500;
     transition: color 0.3s ease;
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .footer-link:hover {
-    color: #3498db;
-    background-color: #f8f9fa;
+    color: #fde047;
+    background-color: rgba(251, 191, 36, 0.15);
+    backdrop-filter: blur(10px);
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
 }
 
 .footer-separator {
-    color: #bdc3c7;
-    font-weight: 300;
+    color: #cbd5e0;
+    font-weight: 400;
 }
 
 /* Responsive footer adjustments */

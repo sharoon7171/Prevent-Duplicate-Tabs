@@ -3,9 +3,9 @@
 .whitelist-section {
     margin-top: 2rem;
     padding: 1.5rem;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     border-radius: 12px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #e2e8f0;
 }
 
 .section-header {
@@ -120,8 +120,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.5rem;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .list-header h4 {
@@ -131,28 +131,7 @@
     font-weight: 600;
 }
 
-.btn-danger {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    transform: translateY(-1px);
-}
-
-.btn-small {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    min-width: auto;
-}
+/* Button styles - REMOVED - Now using shared button.css */
 
 /* Entries Container */
 .entries-container {
@@ -223,40 +202,7 @@
     margin-left: 1rem;
 }
 
-/* Button Styles */
-.btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 100px;
-    text-align: center;
-}
-
-.btn-primary {
-    background-color: #3498db;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
+/* Button Styles - REMOVED - Now using shared button.css */
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -272,10 +218,7 @@
         gap: 0.75rem;
     }
     
-    .btn {
-        width: 100%;
-        min-width: auto;
-    }
+    /* Button styles - REMOVED - Now using shared button.css */
     
     .list-header {
         flex-direction: column;
@@ -312,10 +255,7 @@
         justify-content: center;
     }
     
-    .btn-small {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-    }
+    /* Button styles - REMOVED - Now using shared button.css */
 }
 
 /* Scrollbar Styling */
@@ -354,18 +294,10 @@
 }
 
 /* Focus states for accessibility */
-.btn:focus,
 .form-group input:focus,
 .form-group select:focus {
     outline: 2px solid #3498db;
     outline-offset: 2px;
-}
-
-/* Loading states */
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none !important;
 }
 
 /* Success/Error states for form validation */
@@ -449,11 +381,7 @@
     justify-content: flex-end;
 }
 
-.confirmation-actions .btn {
-    min-width: 80px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-}
+/* Button styles - REMOVED - Now using shared button.css */
 
 /* Animation keyframes */
 @keyframes fadeIn {
@@ -494,8 +422,5 @@
         gap: 0.5rem;
     }
     
-    .confirmation-actions .btn {
-        width: 100%;
-        min-width: auto;
-    }
+    /* Button styles - REMOVED - Now using shared button.css */
 }

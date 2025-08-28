@@ -132,7 +132,6 @@ dev/
 # Test files
 test-results/
 coverage/
-test/
 
 # Documentation build
 docs/build/
@@ -141,3 +140,6 @@ docs/_build/
 # Local configuration overrides
 config.local.js
 config.local.json
+
+# Task tracking files
+task.md
